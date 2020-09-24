@@ -5,4 +5,11 @@
   <version>0.0.1</version>
   <name>COMP4004-A1</name>
   <description>Pirates game for COMP4004 assignment 1</description>
+  <dependencies>
+  	<dependency>
+  		<groupId>junit</groupId>
+  		<artifactId>junit</artifactId>
+  		<version>4.13</version>
+  	</dependency>
+  </dependencies>
 </project>
