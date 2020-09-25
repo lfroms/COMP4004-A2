@@ -1,23 +1,25 @@
 package model;
 
-import java.util.Optional;
-
 public final class Die {
-	private Optional<DieFace> face = Optional.empty();
+	private DieFace face;
 	private Boolean isHeld = false;
+
+	public Die() {
+		face = DieFace.random();
+	}
 
 	public DieFace roll() {
 		DieFace newFace = DieFace.random();
-		face = Optional.of(newFace);
+		face = newFace;
 		return newFace;
 	}
 
-	public Optional<DieFace> getFace() {
+	public DieFace getFace() {
 		return face;
 	}
 
 	public void setFace(DieFace face) {
-		this.face = Optional.of(face);
+		this.face = face;
 	}
 
 	public Boolean getIsHeld() {

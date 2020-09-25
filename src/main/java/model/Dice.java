@@ -18,11 +18,7 @@ public final class Dice {
 
 	public void rollUnheld() {
 		dice.forEach((die) -> {
-			if (die.getFace().isEmpty()) {
-				die.roll();
-			}
-
-			if (!die.getIsHeld() && (die.getFace().get() != DieFace.SKULL)) {
+			if (!die.getIsHeld() && (die.getFace() != DieFace.SKULL)) {
 				die.roll();
 			}
 		});

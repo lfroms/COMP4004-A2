@@ -2,25 +2,16 @@ package model;
 
 import static org.junit.Assert.*;
 
-import java.util.Optional;
-
 import org.junit.Test;
 
 public class DieTest {
 	@Test
-	public void testGetFaceIsInitiallyEmpty() {
-		Die die = new Die();
-
-		assertEquals(Optional.empty(), die.getFace());
-	}
-
-	@Test
 	public void testGetFaceReturnsRolledSide() {
 		Die die = new Die();
 
-		assertEquals(die.roll(), die.getFace().get());
-		assertEquals(die.roll(), die.getFace().get());
-		assertEquals(die.roll(), die.getFace().get());
+		assertEquals(die.roll(), die.getFace());
+		assertEquals(die.roll(), die.getFace());
+		assertEquals(die.roll(), die.getFace());
 	}
 
 	@Test
@@ -28,7 +19,7 @@ public class DieTest {
 		Die die = new Die();
 
 		die.setFace(DieFace.COIN);
-		assertEquals(die.getFace().get(), DieFace.COIN);
+		assertEquals(die.getFace(), DieFace.COIN);
 	}
 
 	@Test
