@@ -6,10 +6,10 @@ import org.junit.Test;
 
 public class DiceTest {
 	@Test
-	public void testRollAllRollsAllDice() {
+	public void testRollUnheldRollsAllDiceIfFirstTime() {
 		Dice dice = new Dice();
 
-		dice.rollAll();
+		dice.rollUnheld();
 
 		dice.getDice().forEach((die) -> {
 			assertFalse(die.getFace().isEmpty());
@@ -19,7 +19,7 @@ public class DiceTest {
 	@Test
 	public void testRollUnheldRollsUnheldDice() {
 		Dice dice = new Dice();
-		dice.rollAll();
+		dice.rollUnheld();
 
 		dice.getDice().get(0).setHeld(true);
 		dice.getDice().get(1).setHeld(true);
@@ -39,22 +39,11 @@ public class DiceTest {
 	@Test
 	public void testRollUnheldDoesNotRollSkulls() {
 		Dice dice = new Dice();
-		dice.rollAll();
+		dice.rollUnheld();
 
 		dice.getDice().get(0).setFace(DieFace.SKULL);
 
 		dice.rollUnheld();
-		assertEquals(dice.getDice().get(0).getFace().get(), DieFace.SKULL);
-	}
-
-	@Test
-	public void testRollAllDoesNotRollSkulls() {
-		Dice dice = new Dice();
-		dice.rollAll();
-
-		dice.getDice().get(0).setFace(DieFace.SKULL);
-
-		dice.rollAll();
 		assertEquals(dice.getDice().get(0).getFace().get(), DieFace.SKULL);
 	}
 }

@@ -15,7 +15,7 @@ public final class Die {
 	public Optional<DieFace> getFace() {
 		return face;
 	}
-	
+
 	public void setFace(DieFace face) {
 		this.face = Optional.of(face);
 	}

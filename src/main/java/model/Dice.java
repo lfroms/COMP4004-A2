@@ -12,18 +12,6 @@ public final class Dice {
 		}
 	}
 
-	public void rollAll() {
-		dice.forEach((die) -> {
-			if (die.getFace().isEmpty()) {
-				die.roll();
-			}
-
-			if (die.getFace().get() != DieFace.SKULL) {
-				die.roll();
-			}
-		});
-	}
-
 	public List<Die> getDice() {
 		return dice;
 	}
