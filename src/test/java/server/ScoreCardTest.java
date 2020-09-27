@@ -34,4 +34,51 @@ public class ScoreCardTest {
 			assertEquals(Integer.valueOf(1), score.getPlayerId());
 		});
 	}
+
+	@Test
+	public void testHasWinnerReturnsTrueWhenPlayerHasAtLeast6000() {
+		ScoreCard scoreCard = new ScoreCard();
+		Score firstScore = new Score(1, 100);
+		Score secondScore = new Score(1, 100);
+		Score thirdScore = new Score(2, 100);
+		Score fourthScore = new Score(2, 5900);
+
+		scoreCard.addNewScore(firstScore);
+		scoreCard.addNewScore(secondScore);
+		scoreCard.addNewScore(thirdScore);
+		scoreCard.addNewScore(fourthScore);
+
+		assertTrue(scoreCard.hasWinner());
+	}
+
+	@Test
+	public void testHasWinnerReturnsFalseWhenNoPlayerHasAbove6000() {
+		ScoreCard scoreCard = new ScoreCard();
+		Score firstScore = new Score(1, 100);
+		Score secondScore = new Score(1, 100);
+		Score thirdScore = new Score(2, 100);
+		Score fourthScore = new Score(2, 5200);
+
+		scoreCard.addNewScore(firstScore);
+		scoreCard.addNewScore(secondScore);
+		scoreCard.addNewScore(thirdScore);
+		scoreCard.addNewScore(fourthScore);
+
+		assertFalse(scoreCard.hasWinner());
+	}
+
+	@Test
+	public void testGetWinnerIdReturnsWinnerId() {
+		ScoreCard scoreCard = new ScoreCard();
+		scoreCard.addNewScore(new Score(1, 6000));
+		scoreCard.addNewScore(new Score(2, 100));
+
+		assertEquals(Integer.valueOf(1), scoreCard.getWinnerId().get());
+
+		ScoreCard secondScoreCard = new ScoreCard();
+		secondScoreCard.addNewScore(new Score(1, 100));
+		secondScoreCard.addNewScore(new Score(2, 6000));
+
+		assertEquals(Integer.valueOf(2), secondScoreCard.getWinnerId().get());
+	}
 }
