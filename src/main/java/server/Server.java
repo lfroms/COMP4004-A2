@@ -1,10 +1,13 @@
 package server;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 final class Server {
 	private static final Integer PORT = 8000;
@@ -13,7 +16,7 @@ final class Server {
 	private final List<Player> players = new ArrayList<Player>();
 
 	public static void main(String[] args) throws IOException {
-		new Server().initializeGame();
+		new Server().start();
 	}
 
 	private Server() throws IOException {
@@ -24,8 +27,18 @@ final class Server {
 		}
 	}
 
-	private void initializeGame() {
-		while (players.size() < 2) {
+	private void start() throws UnknownHostException {
+		System.out.println("Server started at " + InetAddress.getLocalHost().toString());
+		System.out.println("How many players should join? Enter a number:");
+
+		Scanner in = new Scanner(System.in);
+		Integer desiredNumberOfPlayers = in.nextInt();
+		in.close();
+
+		System.out
+				.println("The game will begin automatically after " + desiredNumberOfPlayers + " players have joined.");
+
+		while (players.size() < desiredNumberOfPlayers) {
 			try {
 				Socket socket = serverSocket.accept();
 				Player player = new Player(socket);
@@ -41,21 +54,7 @@ final class Server {
 			}
 		}
 
-		gameLoop();
-	}
-
-	private void gameLoop() {
-		broadcastMessage("The game has started.");
-		// TODO: Implement game loop.
-
-		endGame();
-	}
-
-	private void endGame() {
-		players.forEach(player -> player.endGame());
-	}
-
-	private void broadcastMessage(String message) {
-		players.forEach(player -> player.printMessage(message));
+		Game game = new Game(players);
+		game.loop();
 	}
 }
