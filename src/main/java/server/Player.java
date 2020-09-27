@@ -10,14 +10,20 @@ import java.net.Socket;
 import shared.Opcode;
 
 final class Player {
-	private InputStream inputStream = null;
-	private BufferedReader in = null;
-	private DataOutputStream out = null;
+	private final InputStream inputStream;
+	private final BufferedReader in;
+	private final DataOutputStream out;
+	private final Integer playerId;
 
-	public Player(Socket socket) throws IOException {
+	public Player(Socket socket, Integer id) throws IOException {
 		inputStream = socket.getInputStream();
 		in = new BufferedReader(new InputStreamReader(inputStream));
 		out = new DataOutputStream(socket.getOutputStream());
+		playerId = id;
+	}
+
+	public Integer getId() {
+		return playerId;
 	}
 
 	public void printGreeting() {
@@ -28,14 +34,14 @@ final class Player {
 		safePrint(message);
 	}
 
-	public String promptForSelection() throws IOException {
+	public String promptForSelection() throws IOException, InterruptedException {
 		printOpcode(Opcode.REQUEST_INTEGER);
 
 		return in.readLine();
 	}
 
-	public void sendPlayerId(Integer id) {
-		printOpcode(Opcode.SEND_PLAYER_ID, String.valueOf(id));
+	public void sendPlayerId() {
+		printOpcode(Opcode.SEND_PLAYER_ID, String.valueOf(playerId));
 	}
 
 	public void endGame() {

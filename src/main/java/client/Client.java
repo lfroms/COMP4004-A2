@@ -76,6 +76,18 @@ final class Client {
 			connection.printLine("You are player #" + playerId + ".");
 			break;
 
+		case REQUEST_INTEGER:
+			try {
+				String response = connection.readLineFromUser();
+				connection.sendLineToServer(response);
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			break;
+
 		default:
 			break;
 		}

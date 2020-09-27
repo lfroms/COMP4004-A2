@@ -6,19 +6,20 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.Scanner;
 
 final class Connection {
 	private final InetAddress address;
 	private final Socket socket;
-	private final BufferedReader systemReader;
 	private final BufferedReader inFromServer;
 	private final PrintWriter outToServer;
+
+	private final Scanner scanner = new Scanner(System.in);
 
 	public Connection(Integer port) throws IOException {
 		try {
 			address = InetAddress.getLocalHost();
 			socket = new Socket(address, port);
-			systemReader = new BufferedReader(new InputStreamReader(System.in));
 			inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			outToServer = new PrintWriter(socket.getOutputStream());
 
@@ -31,6 +32,7 @@ final class Connection {
 		inFromServer.close();
 		outToServer.close();
 		socket.close();
+		scanner.close();
 	}
 
 	public String getAddress() {
@@ -38,7 +40,7 @@ final class Connection {
 	}
 
 	public String readLineFromUser() throws IOException {
-		return systemReader.readLine();
+		return scanner.nextLine();
 	}
 
 	public void printLine(String input) {
@@ -51,5 +53,6 @@ final class Connection {
 
 	public void sendLineToServer(String input) {
 		outToServer.println(input);
+		outToServer.flush();
 	}
 }

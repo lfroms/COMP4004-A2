@@ -41,12 +41,12 @@ final class Server {
 		while (players.size() < desiredNumberOfPlayers) {
 			try {
 				Socket socket = serverSocket.accept();
-				Player player = new Player(socket);
+				Player player = new Player(socket, players.size() + 1);
 
 				players.add(player);
 
 				// TODO: Run in thread to not block other clients from connecting.
-				player.sendPlayerId(players.size());
+				player.sendPlayerId();
 				player.printGreeting();
 
 			} catch (IOException e) {
