@@ -1,0 +1,5 @@
+package shared;
+
+public enum Opcode {
+	REQUEST_PLAYER_NAME, RESPONSE_PLAYER_NAME, REQUEST_INTEGER, SEND_PLAYER_ID
+}
