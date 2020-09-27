@@ -36,6 +36,20 @@ public class ScoreCardTest {
 	}
 
 	@Test
+	public void testGetCurrentScoreCalculatesTotalRollingScore() {
+		ScoreCard scoreCard = new ScoreCard();
+		Score firstScore = new Score(1, 100);
+		Score secondScore = new Score(1, 100);
+
+		scoreCard.addNewScore(firstScore);
+		scoreCard.addNewScore(secondScore);
+
+		Integer score = scoreCard.getCurrentScore(1);
+
+		assertEquals(Integer.valueOf(200), score);
+	}
+
+	@Test
 	public void testHasWinnerReturnsTrueWhenPlayerHasAtLeast6000() {
 		ScoreCard scoreCard = new ScoreCard();
 		Score firstScore = new Score(1, 100);
