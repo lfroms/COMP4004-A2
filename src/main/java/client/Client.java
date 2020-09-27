@@ -72,20 +72,11 @@ final class Client {
 
 		switch (operation) {
 		case SEND_PLAYER_ID:
-			playerId = Integer.valueOf(value);
-			connection.printLine("You are player #" + playerId + ".");
+			handleSendPlayerId(value);
 			break;
 
-		case REQUEST_INTEGER:
-			try {
-				String response = connection.readLineFromUser();
-				connection.sendLineToServer(response);
-
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
+		case REQUEST_INPUT:
+			handleRequestInput();
 			break;
 
 		default:
@@ -93,6 +84,22 @@ final class Client {
 		}
 
 		return operation;
+	}
+
+	private void handleSendPlayerId(String value) {
+		playerId = Integer.valueOf(value);
+		connection.printLine("You are player #" + playerId + ".");
+	}
+
+	private void handleRequestInput() {
+		try {
+			String response = connection.readLineFromUser();
+			connection.sendLineToServer(response);
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

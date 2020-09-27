@@ -33,7 +33,7 @@ final class Game {
 		player.printMessage("It is now your turn. Your fortune card is: " + turn.getFortuneCardType());
 
 		try {
-			String input = player.promptForSelection();
+			String input = player.promptForInput();
 			System.out.println(input);
 		} catch (IOException | InterruptedException e) {
 			// TODO Auto-generated catch block

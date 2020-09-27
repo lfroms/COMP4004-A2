@@ -34,8 +34,8 @@ final class Player {
 		safePrint(message);
 	}
 
-	public String promptForSelection() throws IOException, InterruptedException {
-		printOpcode(Opcode.REQUEST_INTEGER);
+	public String promptForInput() throws IOException, InterruptedException {
+		printOpcode(Opcode.REQUEST_INPUT);
 
 		return in.readLine();
 	}
