@@ -47,6 +47,12 @@ final class Server {
 	private void gameLoop() {
 		broadcastMessage("The game has started.");
 		// TODO: Implement game loop.
+
+		endGame();
+	}
+
+	private void endGame() {
+		players.forEach(player -> player.endGame());
 	}
 
 	private void broadcastMessage(String message) {

@@ -38,8 +38,12 @@ final class Player {
 		printOpcode(Opcode.SEND_PLAYER_ID, String.valueOf(id));
 	}
 
+	public void endGame() {
+		printOpcode(Opcode.TERMINATE);
+	}
+
 	private void printOpcode(Opcode code, String value) {
-		safePrint("> " + code.toString() + " " + value + "\r");
+		safePrint("> " + code.toString() + " " + value);
 	}
 
 	private void printOpcode(Opcode code) {
