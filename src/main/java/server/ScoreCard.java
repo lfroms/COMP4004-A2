@@ -24,6 +24,11 @@ final class ScoreCard {
 		return scores.stream().filter(score -> score.getPlayerId() == playerId).collect(Collectors.toList());
 	}
 
+	public Integer getCurrentScore(Integer playerId) {
+		return getScores(playerId).stream().reduce(0, (accumulator, object) -> accumulator + object.getScore(),
+				Integer::sum);
+	}
+
 	public Boolean hasWinner() {
 		return getWinnerId().isPresent();
 	}
