@@ -1,6 +1,6 @@
 package model;
 
-public final class SorceressExpiredException extends Exception {
+public final class CannotRerollSkullException extends Exception {
 
 	/**
 	 * 
