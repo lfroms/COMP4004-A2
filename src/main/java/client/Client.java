@@ -4,21 +4,22 @@ import java.io.IOException;
 
 import shared.Opcode;
 
-final class Client {
+public final class Client extends Thread {
 	private static final Integer PORT = 8000;
 	private final Connection connection;
 
 	private Integer playerId = null;
 
 	public static void main(String args[]) throws IOException {
-		new Client(PORT).start();
+		new Client().start();
 	}
 
-	public Client(Integer port) throws IOException {
-		connection = new Connection(port);
+	public Client() throws IOException {
+		connection = new Connection(PORT);
 	}
 
-	private void start() {
+	@Override
+	public void run() {
 		connection.printLine("Connected to " + connection.getAddress());
 
 		try {

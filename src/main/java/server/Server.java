@@ -4,13 +4,15 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-final class Server {
+final class Server extends Thread {
 	private static final Integer PORT = 8000;
+
+	private final InetAddress localhost;
+	private Integer numberOfPlayers = null;
 
 	private ServerSocket serverSocket = null;
 	private final List<Player> players = new ArrayList<Player>();
@@ -19,26 +21,27 @@ final class Server {
 		new Server().start();
 	}
 
-	private Server() throws IOException {
-		try {
-			serverSocket = new ServerSocket(PORT);
-		} catch (IOException e) {
-			throw e;
-		}
+	public Server(Integer numberOfPlayers) throws IOException {
+		this.numberOfPlayers = numberOfPlayers;
+
+		serverSocket = new ServerSocket(PORT);
+		localhost = InetAddress.getLocalHost();
+
 	}
 
-	private void start() throws UnknownHostException {
-		System.out.println("Server started at " + InetAddress.getLocalHost().toString());
-		System.out.println("How many players should join? Enter a number:");
+	public Server() throws IOException {
+		serverSocket = new ServerSocket(PORT);
+		localhost = InetAddress.getLocalHost();
+	}
 
-		Scanner in = new Scanner(System.in);
-		Integer desiredNumberOfPlayers = in.nextInt();
-		in.close();
+	@Override
+	public void run() {
+		System.out.println("Server started at " + localhost.toString());
+		promptForNumberOfPlayers();
 
-		System.out
-				.println("The game will begin automatically after " + desiredNumberOfPlayers + " players have joined.");
+		System.out.println("The game will begin automatically after " + numberOfPlayers + " players have joined.");
 
-		while (players.size() < desiredNumberOfPlayers) {
+		while (players.size() < numberOfPlayers) {
 			try {
 				Socket socket = serverSocket.accept();
 				Player player = new Player(socket, players.size() + 1);
@@ -56,5 +59,17 @@ final class Server {
 
 		Game game = new Game(players);
 		game.loop();
+	}
+
+	private void promptForNumberOfPlayers() {
+		if (numberOfPlayers != null) {
+			return;
+		}
+
+		System.out.println("How many players should join? Enter a number:");
+
+		Scanner in = new Scanner(System.in);
+		numberOfPlayers = in.nextInt();
+		in.close();
 	}
 }
