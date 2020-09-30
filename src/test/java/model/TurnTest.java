@@ -372,4 +372,154 @@ public class TurnTest {
 
 		assertEquals(Integer.valueOf(600), turn.evaluatePoints());
 	}
+
+	@Test
+	public void testUseSkullRerollWithSorceressFortuneCard() {
+		Turn turn = new Turn(new FortuneCard(FortuneCardType.SORCERESS));
+
+		List<Die> dice = turn.getDice();
+		dice.subList(0, 2).forEach(die -> {
+			die.setFace(DieFace.SKULL);
+		});
+		dice.subList(2, 8).forEach(die -> {
+			die.setFace(DieFace.COIN);
+			die.setHeld(true);
+		});
+
+		assertTrue(turn.canRerollASkull());
+
+		try {
+			turn.rerollSingleSkull();
+		} catch (SorceressExpiredException e) {
+			fail("SorceressExpiredException should not have been thrown because not yet used.");
+		}
+
+		assertFalse(turn.canRerollASkull());
+
+		try {
+			turn.rerollSingleSkull();
+
+			fail("SorceressExpiredException was not thrown when the reroll is reused.");
+		} catch (SorceressExpiredException exception) {
+		}
+	}
+
+	@Test
+	public void testCombinationAWithMonkeyBusinessFortuneCard() {
+		Turn turn = new Turn(new FortuneCard(FortuneCardType.MONKEY_BUSINESS));
+
+		List<Die> dice = turn.getDice();
+		dice.get(0).setFace(DieFace.MONKEY);
+		dice.get(1).setFace(DieFace.MONKEY);
+		dice.get(2).setFace(DieFace.MONKEY);
+		dice.get(3).setFace(DieFace.PARROT);
+		dice.get(4).setFace(DieFace.PARROT);
+		dice.get(5).setFace(DieFace.PARROT);
+		dice.get(6).setFace(DieFace.SKULL);
+		dice.get(7).setFace(DieFace.COIN);
+
+		assertEquals(Integer.valueOf(1100), turn.evaluatePoints());
+	}
+
+	@Test
+	public void testCombinationBWithMonkeyBusinessFortuneCard() {
+		Turn turn = new Turn(new FortuneCard(FortuneCardType.MONKEY_BUSINESS));
+
+		List<Die> dice = turn.getDice();
+		dice.get(0).setFace(DieFace.MONKEY);
+		dice.get(1).setFace(DieFace.MONKEY);
+		dice.get(2).setFace(DieFace.PARROT);
+		dice.get(3).setFace(DieFace.COIN);
+		dice.get(4).setFace(DieFace.COIN);
+		dice.get(5).setFace(DieFace.DIAMOND);
+		dice.get(6).setFace(DieFace.SWORD);
+		dice.get(7).setFace(DieFace.SWORD);
+
+		assertEquals(Integer.valueOf(400), turn.evaluatePoints());
+	}
+
+	@Test
+	public void testCombinationCWithMonkeyBusinessFortuneCard() {
+		Turn turn = new Turn(new FortuneCard(FortuneCardType.MONKEY_BUSINESS));
+
+		List<Die> dice = turn.getDice();
+		dice.get(0).setFace(DieFace.MONKEY);
+		dice.get(1).setFace(DieFace.MONKEY);
+		dice.get(2).setFace(DieFace.MONKEY);
+		dice.get(3).setFace(DieFace.PARROT);
+		dice.get(4).setFace(DieFace.PARROT);
+		dice.get(5).setFace(DieFace.PARROT);
+		dice.get(6).setFace(DieFace.PARROT);
+		dice.get(7).setFace(DieFace.SWORD);
+
+		assertEquals(Integer.valueOf(2000), turn.evaluatePoints());
+	}
+
+	@Test
+	public void testFullChestWith3Monkeys3Swords1Diamond1ParrotWithGoldFortuneCard() {
+		Turn turn = new Turn(new FortuneCard(FortuneCardType.GOLD));
+
+		List<Die> dice = turn.getDice();
+		dice.get(0).setFace(DieFace.MONKEY);
+		dice.get(1).setFace(DieFace.MONKEY);
+		dice.get(2).setFace(DieFace.MONKEY);
+		dice.get(3).setFace(DieFace.SWORD);
+		dice.get(4).setFace(DieFace.SWORD);
+		dice.get(5).setFace(DieFace.SWORD);
+		dice.get(6).setFace(DieFace.DIAMOND);
+		dice.get(7).setFace(DieFace.PARROT);
+
+		assertEquals(Integer.valueOf(400), turn.evaluatePoints());
+	}
+
+	@Test
+	public void testFullChestWith3Monkeys3Swords2CoinsWithCaptainFortuneCard() {
+		Turn turn = new Turn(new FortuneCard(FortuneCardType.CAPTAIN));
+
+		List<Die> dice = turn.getDice();
+		dice.get(0).setFace(DieFace.MONKEY);
+		dice.get(1).setFace(DieFace.MONKEY);
+		dice.get(2).setFace(DieFace.MONKEY);
+		dice.get(3).setFace(DieFace.SWORD);
+		dice.get(4).setFace(DieFace.SWORD);
+		dice.get(5).setFace(DieFace.SWORD);
+		dice.get(6).setFace(DieFace.COIN);
+		dice.get(7).setFace(DieFace.COIN);
+
+		assertEquals(Integer.valueOf(1800), turn.evaluatePoints());
+	}
+
+	@Test
+	public void testFullChestWith3Monkeys4Swords1DiamondWithGoldFortuneCard() {
+		Turn turn = new Turn(new FortuneCard(FortuneCardType.GOLD));
+
+		List<Die> dice = turn.getDice();
+		dice.get(0).setFace(DieFace.MONKEY);
+		dice.get(1).setFace(DieFace.MONKEY);
+		dice.get(2).setFace(DieFace.MONKEY);
+		dice.get(3).setFace(DieFace.SWORD);
+		dice.get(4).setFace(DieFace.SWORD);
+		dice.get(5).setFace(DieFace.SWORD);
+		dice.get(6).setFace(DieFace.SWORD);
+		dice.get(7).setFace(DieFace.DIAMOND);
+
+		assertEquals(Integer.valueOf(1000), turn.evaluatePoints());
+	}
+
+	@Test
+	public void testFullChestWithMonkeyBusinessFortuneCard() {
+		Turn turn = new Turn(new FortuneCard(FortuneCardType.MONKEY_BUSINESS));
+
+		List<Die> dice = turn.getDice();
+		dice.get(0).setFace(DieFace.MONKEY);
+		dice.get(1).setFace(DieFace.MONKEY);
+		dice.get(2).setFace(DieFace.PARROT);
+		dice.get(3).setFace(DieFace.COIN);
+		dice.get(4).setFace(DieFace.COIN);
+		dice.get(5).setFace(DieFace.DIAMOND);
+		dice.get(6).setFace(DieFace.DIAMOND);
+		dice.get(7).setFace(DieFace.DIAMOND);
+
+		assertEquals(Integer.valueOf(1200), turn.evaluatePoints());
+	}
 }
