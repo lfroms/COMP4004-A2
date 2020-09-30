@@ -1,6 +1,10 @@
 package model;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -15,6 +19,8 @@ public final class Turn {
 	private Integer numberOfCoins = 0;
 	private Integer numberOfMonkeys = 0;
 	private Integer numberOfDiamonds = 0;
+
+	private Boolean sorceressFortuneCardExpired = false;
 
 	public Turn() {
 		fortuneCard = new FortuneCard();
@@ -50,15 +56,39 @@ public final class Turn {
 		return numberOfSkulls < 3;
 	}
 
+	public Boolean canRerollASkull() {
+		return !sorceressFortuneCardExpired;
+	}
+
+	public void rerollSingleSkull() throws SorceressExpiredException {
+		if (!canRerollASkull()) {
+			throw new SorceressExpiredException();
+		}
+
+		Optional<Die> firstSkull = dice.getDice().stream().filter(die -> die.getFace() == DieFace.SKULL).findFirst();
+
+		if (firstSkull.isEmpty()) {
+			return;
+		}
+
+		firstSkull.get().roll();
+		sorceressFortuneCardExpired = true;
+	}
+
 	// **** Scoring **** //
 
 	public Integer evaluatePoints() {
 		countDiceTypes();
 
-		accumulatedPoints += evaluateOfAKindPoints(numberOfParrots);
+		if (fortuneCard.getType() == FortuneCardType.MONKEY_BUSINESS) {
+			accumulatedPoints += evaluateOfAKindPoints(numberOfParrots + numberOfMonkeys);
+		} else {
+			accumulatedPoints += evaluateOfAKindPoints(numberOfParrots);
+			accumulatedPoints += evaluateOfAKindPoints(numberOfMonkeys);
+		}
+
 		accumulatedPoints += evaluateOfAKindPoints(numberOfSwords);
 		accumulatedPoints += evaluateOfAKindPoints(numberOfCoins);
-		accumulatedPoints += evaluateOfAKindPoints(numberOfMonkeys);
 		accumulatedPoints += evaluateOfAKindPoints(numberOfDiamonds);
 
 		accumulatedPoints += numberOfCoins * 100;
@@ -68,24 +98,11 @@ public final class Turn {
 			accumulatedPoints += 500;
 		}
 
-		triggerFortuneCardScoring();
+		if (fortuneCard.getType() == FortuneCardType.CAPTAIN) {
+			accumulatedPoints *= 2;
+		}
 
 		return accumulatedPoints;
-	}
-
-	private void triggerFortuneCardScoring() {
-		switch (fortuneCard.getType()) {
-		case CAPTAIN:
-			scoreCaptainFortuneCard();
-			break;
-
-		default:
-			break;
-		}
-	}
-
-	private void scoreCaptainFortuneCard() {
-		accumulatedPoints *= 2;
 	}
 
 	// **** Miscellaneous Helpers **** //
@@ -127,9 +144,33 @@ public final class Turn {
 	}
 
 	private Boolean isFullChest() {
-		// TODO: Add full implementation for Full Chest.
+		Boolean hasNoSkulls = dice.getDice().stream().allMatch(die -> die.getFace() != DieFace.SKULL);
 
-		return dice.getDice().stream().allMatch(die -> die.getFace() != DieFace.SKULL);
+		if (!hasNoSkulls) {
+			return false;
+		}
+
+		return dice.getDice().stream().filter(die -> !dieHasFaceValue(die)).allMatch(die -> dieIsPartOfSet(die));
+	}
+
+	private boolean dieHasFaceValue(Die die) {
+		return die.getFace() == DieFace.COIN || die.getFace() == DieFace.DIAMOND;
+	}
+
+	private Boolean dieIsPartOfSet(Die die) {
+		return dice.getDice().stream().filter(otherDie -> diceHaveMatchingScorableFaces(die, otherDie)).count() > 2;
+	}
+
+	private Boolean diceHaveMatchingScorableFaces(Die first, Die second) {
+		if (fortuneCard.getType() != FortuneCardType.MONKEY_BUSINESS) {
+			return first.getFace() == second.getFace();
+		}
+
+		return dieIsMonkeyOrParrot(first) ? dieIsMonkeyOrParrot(second) : false;
+	}
+
+	private Boolean dieIsMonkeyOrParrot(Die die) {
+		return die.getFace() == DieFace.MONKEY || die.getFace() == DieFace.PARROT;
 	}
 
 	private Integer countDice(List<Die> input, DieFace face) {
@@ -146,5 +187,10 @@ public final class Turn {
 
 	private <T, X> List<X> filterByPredicate(List<X> input, Predicate<? super X> predicate) {
 		return input.stream().filter(predicate).collect(Collectors.toList());
+	}
+
+	public <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+		Map<Object, Boolean> seen = new ConcurrentHashMap<>();
+		return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
 	}
 }
