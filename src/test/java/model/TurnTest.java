@@ -11,7 +11,7 @@ public class TurnTest {
 	public void testTurnCanContinueIsTrueIfLessThanThreeSkulls() {
 		Turn turn = new Turn();
 
-		List<Die> dice = turn.getDice();
+		List<Die> dice = turn.getDice().getAll();
 		dice.forEach(die -> {
 			die.setFace(DieFace.COIN);
 		});
@@ -25,7 +25,7 @@ public class TurnTest {
 	public void testTurnCanContinueIsFalseIfAtLeastThreeSkulls() {
 		Turn turn = new Turn();
 
-		List<Die> dice = turn.getDice();
+		List<Die> dice = turn.getDice().getAll();
 		dice.forEach(die -> {
 			die.setFace(DieFace.SKULL);
 		});
@@ -39,7 +39,7 @@ public class TurnTest {
 	public void testRollDiceThrowsTurnCompleteExceptionIfCannotContinue() throws InsufficientDiceException {
 		Turn turn = new Turn();
 
-		List<Die> dice = turn.getDice();
+		List<Die> dice = turn.getDice().getAll();
 		dice.forEach(die -> {
 			die.setFace(DieFace.SKULL);
 		});
@@ -56,7 +56,7 @@ public class TurnTest {
 	public void testRollDiceDoesNotThrowTurnCompleteExceptionIfCanContinue() throws InsufficientDiceException {
 		Turn turn = new Turn();
 
-		List<Die> dice = turn.getDice();
+		List<Die> dice = turn.getDice().getAll();
 		dice.forEach(die -> {
 			die.setFace(DieFace.DIAMOND);
 		});
@@ -72,7 +72,7 @@ public class TurnTest {
 	public void testRollDiceThrowsInsufficientDiceExceptionIfInsufficientDice() throws TurnCompleteException {
 		Turn turn = new Turn();
 
-		List<Die> dice = turn.getDice();
+		List<Die> dice = turn.getDice().getAll();
 		dice.forEach(die -> {
 			die.setFace(DieFace.DIAMOND);
 			die.setHeld(true);
@@ -90,7 +90,7 @@ public class TurnTest {
 	public void testRollDiceDoesNotThrowInsufficientDiceExceptionIfSufficientDice() throws TurnCompleteException {
 		Turn turn = new Turn();
 
-		List<Die> dice = turn.getDice();
+		List<Die> dice = turn.getDice().getAll();
 		dice.forEach(die -> {
 			die.setFace(DieFace.DIAMOND);
 			die.setHeld(false);
@@ -104,280 +104,10 @@ public class TurnTest {
 	}
 
 	@Test
-	public void testSetOfThreeWithGoldFortuneCard() {
-		Turn turn = new Turn(new FortuneCard(FortuneCardType.GOLD));
-
-		List<Die> dice = turn.getDice();
-		dice.subList(0, 3).forEach(die -> {
-			die.setFace(DieFace.MONKEY);
-		});
-
-		dice.get(3).setFace(DieFace.PARROT);
-		dice.get(4).setFace(DieFace.SKULL);
-		dice.get(5).setFace(DieFace.SKULL);
-		dice.get(6).setFace(DieFace.PARROT);
-		dice.get(7).setFace(DieFace.SWORD);
-
-		assertEquals(Integer.valueOf(200), turn.evaluatePoints());
-	}
-
-	@Test
-	public void testTwoSetsOfThreeWithGoldFortuneCard() {
-		Turn turn = new Turn(new FortuneCard(FortuneCardType.GOLD));
-
-		List<Die> dice = turn.getDice();
-		dice.subList(0, 3).forEach(die -> {
-			die.setFace(DieFace.MONKEY);
-		});
-		dice.subList(3, 6).forEach(die -> {
-			die.setFace(DieFace.SWORD);
-		});
-
-		dice.get(6).setFace(DieFace.PARROT);
-		dice.get(7).setFace(DieFace.SKULL);
-
-		assertEquals(Integer.valueOf(300), turn.evaluatePoints());
-	}
-
-	@Test
-	public void testThreeDiamondsWithGoldFortuneCard() {
-		Turn turn = new Turn(new FortuneCard(FortuneCardType.GOLD));
-
-		List<Die> dice = turn.getDice();
-		dice.subList(0, 3).forEach(die -> {
-			die.setFace(DieFace.DIAMOND);
-		});
-
-		dice.get(3).setFace(DieFace.PARROT);
-		dice.get(4).setFace(DieFace.SKULL);
-		dice.get(5).setFace(DieFace.PARROT);
-		dice.get(6).setFace(DieFace.SWORD);
-		dice.get(7).setFace(DieFace.SKULL);
-
-		assertEquals(Integer.valueOf(500), turn.evaluatePoints());
-	}
-
-	@Test
-	public void testFourCoinsWithDiamondFortuneCard() {
-		Turn turn = new Turn(new FortuneCard(FortuneCardType.DIAMOND));
-
-		List<Die> dice = turn.getDice();
-		dice.subList(0, 4).forEach(die -> {
-			die.setFace(DieFace.COIN);
-		});
-
-		dice.get(4).setFace(DieFace.SKULL);
-		dice.get(5).setFace(DieFace.PARROT);
-		dice.get(6).setFace(DieFace.SWORD);
-		dice.get(7).setFace(DieFace.SKULL);
-
-		assertEquals(Integer.valueOf(700), turn.evaluatePoints());
-	}
-
-	@Test
-	public void testThreeSwordsAndFourParrotsWithGoldFortuneCard() {
-		Turn turn = new Turn(new FortuneCard(FortuneCardType.GOLD));
-
-		List<Die> dice = turn.getDice();
-		dice.subList(0, 3).forEach(die -> {
-			die.setFace(DieFace.SWORD);
-		});
-		dice.subList(3, 7).forEach(die -> {
-			die.setFace(DieFace.PARROT);
-		});
-
-		dice.get(7).setFace(DieFace.SKULL);
-
-		assertEquals(Integer.valueOf(400), turn.evaluatePoints());
-	}
-
-	@Test
-	public void testThreeCoinsAndFourSwordsWithGoldFortuneCard() {
-		Turn turn = new Turn(new FortuneCard(FortuneCardType.GOLD));
-
-		List<Die> dice = turn.getDice();
-		dice.subList(0, 3).forEach(die -> {
-			die.setFace(DieFace.COIN);
-		});
-		dice.subList(3, 7).forEach(die -> {
-			die.setFace(DieFace.SWORD);
-		});
-
-		dice.get(7).setFace(DieFace.SKULL);
-
-		assertEquals(Integer.valueOf(800), turn.evaluatePoints());
-	}
-
-	@Test
-	public void testThreeCoinsAndFourSwordsWithCaptainFortuneCard() {
-		Turn turn = new Turn(new FortuneCard(FortuneCardType.CAPTAIN));
-
-		List<Die> dice = turn.getDice();
-		dice.subList(0, 3).forEach(die -> {
-			die.setFace(DieFace.COIN);
-		});
-		dice.subList(3, 7).forEach(die -> {
-			die.setFace(DieFace.SWORD);
-		});
-
-		dice.get(7).setFace(DieFace.SKULL);
-
-		assertEquals(Integer.valueOf(1200), turn.evaluatePoints());
-	}
-
-	@Test
-	public void testFiveSwordsWithGoldFortuneCard() {
-		Turn turn = new Turn(new FortuneCard(FortuneCardType.GOLD));
-
-		List<Die> dice = turn.getDice();
-		dice.subList(0, 5).forEach(die -> {
-			die.setFace(DieFace.SWORD);
-		});
-
-		dice.get(5).setFace(DieFace.PARROT);
-		dice.get(6).setFace(DieFace.SKULL);
-		dice.get(7).setFace(DieFace.SKULL);
-
-		assertEquals(Integer.valueOf(600), turn.evaluatePoints());
-	}
-
-	@Test
-	public void testSixMonkeysWithGoldFortuneCard() {
-		Turn turn = new Turn(new FortuneCard(FortuneCardType.GOLD));
-
-		List<Die> dice = turn.getDice();
-		dice.subList(0, 6).forEach(die -> {
-			die.setFace(DieFace.MONKEY);
-		});
-
-		dice.get(6).setFace(DieFace.SKULL);
-		dice.get(7).setFace(DieFace.SKULL);
-
-		assertEquals(Integer.valueOf(1100), turn.evaluatePoints());
-	}
-
-	@Test
-	public void testSevenParrotsWithGoldFortuneCard() {
-		Turn turn = new Turn(new FortuneCard(FortuneCardType.GOLD));
-
-		List<Die> dice = turn.getDice();
-		dice.subList(0, 7).forEach(die -> {
-			die.setFace(DieFace.PARROT);
-		});
-
-		dice.get(7).setFace(DieFace.SKULL);
-
-		assertEquals(Integer.valueOf(2100), turn.evaluatePoints());
-	}
-
-	@Test
-	public void testEightCoinsWithGoldFortuneCard() {
-		Turn turn = new Turn(new FortuneCard(FortuneCardType.GOLD));
-
-		List<Die> dice = turn.getDice();
-		dice.subList(0, 8).forEach(die -> {
-			die.setFace(DieFace.COIN);
-		});
-
-		assertEquals(Integer.valueOf(5300), turn.evaluatePoints());
-	}
-
-	@Test
-	public void testEightCoinsWithDiamondFortuneCard() {
-		Turn turn = new Turn(new FortuneCard(FortuneCardType.DIAMOND));
-
-		List<Die> dice = turn.getDice();
-		dice.subList(0, 8).forEach(die -> {
-			die.setFace(DieFace.COIN);
-		});
-
-		assertEquals(Integer.valueOf(5400), turn.evaluatePoints());
-	}
-
-	@Test
-	public void testEightSwordsWithCaptainFortuneCard() {
-		Turn turn = new Turn(new FortuneCard(FortuneCardType.CAPTAIN));
-
-		List<Die> dice = turn.getDice();
-		dice.subList(0, 8).forEach(die -> {
-			die.setFace(DieFace.SWORD);
-		});
-
-		assertEquals(Integer.valueOf(9000), turn.evaluatePoints());
-	}
-
-	@Test
-	public void testEightMonkeysWithGoldFortuneCard() {
-		Turn turn = new Turn(new FortuneCard(FortuneCardType.GOLD));
-
-		List<Die> dice = turn.getDice();
-		dice.subList(0, 8).forEach(die -> {
-			die.setFace(DieFace.MONKEY);
-		});
-
-		assertEquals(Integer.valueOf(4600), turn.evaluatePoints());
-	}
-
-	@Test
-	public void testTwoDiamondsWithDiamondFortuneCard() {
-		Turn turn = new Turn(new FortuneCard(FortuneCardType.DIAMOND));
-
-		List<Die> dice = turn.getDice();
-		dice.subList(0, 2).forEach(die -> {
-			die.setFace(DieFace.DIAMOND);
-		});
-
-		dice.get(2).setFace(DieFace.MONKEY);
-		dice.get(3).setFace(DieFace.SKULL);
-		dice.get(4).setFace(DieFace.MONKEY);
-		dice.get(5).setFace(DieFace.PARROT);
-		dice.get(6).setFace(DieFace.SWORD);
-		dice.get(7).setFace(DieFace.SKULL);
-
-		assertEquals(Integer.valueOf(400), turn.evaluatePoints());
-	}
-
-	@Test
-	public void testThreeCoinsWithGoldFortuneCard() {
-		Turn turn = new Turn(new FortuneCard(FortuneCardType.GOLD));
-
-		List<Die> dice = turn.getDice();
-		dice.subList(0, 3).forEach(die -> {
-			die.setFace(DieFace.COIN);
-		});
-
-		dice.get(3).setFace(DieFace.SKULL);
-		dice.get(4).setFace(DieFace.MONKEY);
-		dice.get(5).setFace(DieFace.PARROT);
-		dice.get(6).setFace(DieFace.SWORD);
-		dice.get(7).setFace(DieFace.SKULL);
-
-		assertEquals(Integer.valueOf(600), turn.evaluatePoints());
-	}
-
-	@Test
-	public void testFourMonkeysAndFourCoinsWithGoldFortuneCard() {
-		Turn turn = new Turn(new FortuneCard(FortuneCardType.GOLD));
-
-		List<Die> dice = turn.getDice();
-		dice.subList(0, 4).forEach(die -> {
-			die.setFace(DieFace.MONKEY);
-		});
-		dice.subList(4, 6).forEach(die -> {
-			die.setFace(DieFace.COIN);
-		});
-
-		dice.get(6).setFace(DieFace.SKULL);
-		dice.get(7).setFace(DieFace.SKULL);
-
-		assertEquals(Integer.valueOf(600), turn.evaluatePoints());
-	}
-
-	@Test
 	public void testUseSkullRerollWithSorceressFortuneCard() {
 		Turn turn = new Turn(new FortuneCard(FortuneCardType.SORCERESS));
 
-		List<Die> dice = turn.getDice();
+		List<Die> dice = turn.getDice().getAll();
 		dice.subList(0, 2).forEach(die -> {
 			die.setFace(DieFace.SKULL);
 		});
@@ -402,124 +132,5 @@ public class TurnTest {
 			fail("SorceressExpiredException was not thrown when the reroll is reused.");
 		} catch (SorceressExpiredException exception) {
 		}
-	}
-
-	@Test
-	public void testCombinationAWithMonkeyBusinessFortuneCard() {
-		Turn turn = new Turn(new FortuneCard(FortuneCardType.MONKEY_BUSINESS));
-
-		List<Die> dice = turn.getDice();
-		dice.get(0).setFace(DieFace.MONKEY);
-		dice.get(1).setFace(DieFace.MONKEY);
-		dice.get(2).setFace(DieFace.MONKEY);
-		dice.get(3).setFace(DieFace.PARROT);
-		dice.get(4).setFace(DieFace.PARROT);
-		dice.get(5).setFace(DieFace.PARROT);
-		dice.get(6).setFace(DieFace.SKULL);
-		dice.get(7).setFace(DieFace.COIN);
-
-		assertEquals(Integer.valueOf(1100), turn.evaluatePoints());
-	}
-
-	@Test
-	public void testCombinationBWithMonkeyBusinessFortuneCard() {
-		Turn turn = new Turn(new FortuneCard(FortuneCardType.MONKEY_BUSINESS));
-
-		List<Die> dice = turn.getDice();
-		dice.get(0).setFace(DieFace.MONKEY);
-		dice.get(1).setFace(DieFace.MONKEY);
-		dice.get(2).setFace(DieFace.PARROT);
-		dice.get(3).setFace(DieFace.COIN);
-		dice.get(4).setFace(DieFace.COIN);
-		dice.get(5).setFace(DieFace.DIAMOND);
-		dice.get(6).setFace(DieFace.SWORD);
-		dice.get(7).setFace(DieFace.SWORD);
-
-		assertEquals(Integer.valueOf(400), turn.evaluatePoints());
-	}
-
-	@Test
-	public void testCombinationCWithMonkeyBusinessFortuneCard() {
-		Turn turn = new Turn(new FortuneCard(FortuneCardType.MONKEY_BUSINESS));
-
-		List<Die> dice = turn.getDice();
-		dice.get(0).setFace(DieFace.MONKEY);
-		dice.get(1).setFace(DieFace.MONKEY);
-		dice.get(2).setFace(DieFace.MONKEY);
-		dice.get(3).setFace(DieFace.PARROT);
-		dice.get(4).setFace(DieFace.PARROT);
-		dice.get(5).setFace(DieFace.PARROT);
-		dice.get(6).setFace(DieFace.PARROT);
-		dice.get(7).setFace(DieFace.SWORD);
-
-		assertEquals(Integer.valueOf(2000), turn.evaluatePoints());
-	}
-
-	@Test
-	public void testFullChestWith3Monkeys3Swords1Diamond1ParrotWithGoldFortuneCard() {
-		Turn turn = new Turn(new FortuneCard(FortuneCardType.GOLD));
-
-		List<Die> dice = turn.getDice();
-		dice.get(0).setFace(DieFace.MONKEY);
-		dice.get(1).setFace(DieFace.MONKEY);
-		dice.get(2).setFace(DieFace.MONKEY);
-		dice.get(3).setFace(DieFace.SWORD);
-		dice.get(4).setFace(DieFace.SWORD);
-		dice.get(5).setFace(DieFace.SWORD);
-		dice.get(6).setFace(DieFace.DIAMOND);
-		dice.get(7).setFace(DieFace.PARROT);
-
-		assertEquals(Integer.valueOf(400), turn.evaluatePoints());
-	}
-
-	@Test
-	public void testFullChestWith3Monkeys3Swords2CoinsWithCaptainFortuneCard() {
-		Turn turn = new Turn(new FortuneCard(FortuneCardType.CAPTAIN));
-
-		List<Die> dice = turn.getDice();
-		dice.get(0).setFace(DieFace.MONKEY);
-		dice.get(1).setFace(DieFace.MONKEY);
-		dice.get(2).setFace(DieFace.MONKEY);
-		dice.get(3).setFace(DieFace.SWORD);
-		dice.get(4).setFace(DieFace.SWORD);
-		dice.get(5).setFace(DieFace.SWORD);
-		dice.get(6).setFace(DieFace.COIN);
-		dice.get(7).setFace(DieFace.COIN);
-
-		assertEquals(Integer.valueOf(1800), turn.evaluatePoints());
-	}
-
-	@Test
-	public void testFullChestWith3Monkeys4Swords1DiamondWithGoldFortuneCard() {
-		Turn turn = new Turn(new FortuneCard(FortuneCardType.GOLD));
-
-		List<Die> dice = turn.getDice();
-		dice.get(0).setFace(DieFace.MONKEY);
-		dice.get(1).setFace(DieFace.MONKEY);
-		dice.get(2).setFace(DieFace.MONKEY);
-		dice.get(3).setFace(DieFace.SWORD);
-		dice.get(4).setFace(DieFace.SWORD);
-		dice.get(5).setFace(DieFace.SWORD);
-		dice.get(6).setFace(DieFace.SWORD);
-		dice.get(7).setFace(DieFace.DIAMOND);
-
-		assertEquals(Integer.valueOf(1000), turn.evaluatePoints());
-	}
-
-	@Test
-	public void testFullChestWithMonkeyBusinessFortuneCard() {
-		Turn turn = new Turn(new FortuneCard(FortuneCardType.MONKEY_BUSINESS));
-
-		List<Die> dice = turn.getDice();
-		dice.get(0).setFace(DieFace.MONKEY);
-		dice.get(1).setFace(DieFace.MONKEY);
-		dice.get(2).setFace(DieFace.PARROT);
-		dice.get(3).setFace(DieFace.COIN);
-		dice.get(4).setFace(DieFace.COIN);
-		dice.get(5).setFace(DieFace.DIAMOND);
-		dice.get(6).setFace(DieFace.DIAMOND);
-		dice.get(7).setFace(DieFace.DIAMOND);
-
-		assertEquals(Integer.valueOf(1200), turn.evaluatePoints());
 	}
 }

@@ -10,19 +10,19 @@ public class DiceTest {
 		Dice dice = new Dice();
 		dice.rollUnheld();
 
-		dice.getDice().get(0).setHeld(true);
-		dice.getDice().get(1).setHeld(true);
-		dice.getDice().get(2).setHeld(true);
+		dice.getAll().get(0).setHeld(true);
+		dice.getAll().get(1).setHeld(true);
+		dice.getAll().get(2).setHeld(true);
 
-		DieFace firstFace = dice.getDice().get(0).getFace();
-		DieFace secondFace = dice.getDice().get(1).getFace();
-		DieFace thirdFace = dice.getDice().get(2).getFace();
+		DieFace firstFace = dice.getAll().get(0).getFace();
+		DieFace secondFace = dice.getAll().get(1).getFace();
+		DieFace thirdFace = dice.getAll().get(2).getFace();
 
 		dice.rollUnheld();
 
-		assertEquals(firstFace, dice.getDice().get(0).getFace());
-		assertEquals(secondFace, dice.getDice().get(1).getFace());
-		assertEquals(thirdFace, dice.getDice().get(2).getFace());
+		assertEquals(firstFace, dice.getAll().get(0).getFace());
+		assertEquals(secondFace, dice.getAll().get(1).getFace());
+		assertEquals(thirdFace, dice.getAll().get(2).getFace());
 	}
 
 	@Test
@@ -30,9 +30,9 @@ public class DiceTest {
 		Dice dice = new Dice();
 		dice.rollUnheld();
 
-		dice.getDice().get(0).setFace(DieFace.SKULL);
+		dice.getAll().get(0).setFace(DieFace.SKULL);
 
 		dice.rollUnheld();
-		assertEquals(dice.getDice().get(0).getFace(), DieFace.SKULL);
+		assertEquals(dice.getAll().get(0).getFace(), DieFace.SKULL);
 	}
 }

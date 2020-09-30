@@ -12,7 +12,7 @@ public final class Dice {
 		}
 	}
 
-	public List<Die> getDice() {
+	public List<Die> getAll() {
 		return dice;
 	}
 

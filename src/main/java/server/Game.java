@@ -30,7 +30,7 @@ final class Game {
 	private void turnForPlayer(Player player) {
 		Turn turn = new Turn();
 
-		player.printMessage("It is now your turn. Your fortune card is: " + turn.getFortuneCardType());
+		player.printMessage("It is now your turn. Your fortune card is: " + turn.getFortuneCard().getType());
 
 		try {
 			String input = player.promptForInput();
