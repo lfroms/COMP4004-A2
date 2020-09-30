@@ -120,8 +120,8 @@ public class TurnTest {
 
 		try {
 			turn.rerollSingleSkull();
-		} catch (CannotRerollSkullException e) {
-			fail("CannotRerollSkullException should not have been thrown because not yet used.");
+		} catch (FortuneCardInvalidException e) {
+			fail("FortuneCardInvalidException should not have been thrown because not yet used.");
 		}
 
 		assertFalse(turn.canRerollASkull());
@@ -129,8 +129,8 @@ public class TurnTest {
 		try {
 			turn.rerollSingleSkull();
 
-			fail("CannotRerollSkullException was not thrown when the reroll is reused.");
-		} catch (CannotRerollSkullException exception) {
+			fail("FortuneCardInvalidException was not thrown when the reroll is reused.");
+		} catch (FortuneCardInvalidException exception) {
 		}
 	}
 
@@ -143,8 +143,8 @@ public class TurnTest {
 		try {
 			turn.rerollSingleSkull();
 
-			fail("CannotRerollSkullException was not thrown but the Sorceress fortune card is not the active card.");
-		} catch (CannotRerollSkullException exception) {
+			fail("FortuneCardInvalidException was not thrown but the Sorceress fortune card is not the active card.");
+		} catch (FortuneCardInvalidException exception) {
 		}
 	}
 }

@@ -1,6 +1,6 @@
 package model;
 
-public final class CannotRerollSkullException extends Exception {
+public final class FortuneCardInvalidException extends Exception {
 
 	/**
 	 * 

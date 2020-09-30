@@ -49,9 +49,9 @@ public final class Turn {
 		return !sorceressFortuneCardExpired && fortuneCard.getType() == FortuneCardType.SORCERESS;
 	}
 
-	public void rerollSingleSkull() throws CannotRerollSkullException {
+	public void rerollSingleSkull() throws FortuneCardInvalidException {
 		if (!canRerollASkull()) {
-			throw new CannotRerollSkullException();
+			throw new FortuneCardInvalidException();
 		}
 
 		Optional<Die> firstSkull = dice.getAll().stream().filter(die -> die.getFace() == DieFace.SKULL).findFirst();
