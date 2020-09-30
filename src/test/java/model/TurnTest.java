@@ -104,7 +104,7 @@ public class TurnTest {
 	}
 
 	@Test
-	public void testUseSkullRerollWithSorceressFortuneCard() {
+	public void testRerollSingleSkullWithSorceressFortuneCard() {
 		Turn turn = new Turn(new FortuneCard(FortuneCardType.SORCERESS));
 
 		List<Die> dice = turn.getDice().getAll();
@@ -120,8 +120,8 @@ public class TurnTest {
 
 		try {
 			turn.rerollSingleSkull();
-		} catch (SorceressExpiredException e) {
-			fail("SorceressExpiredException should not have been thrown because not yet used.");
+		} catch (CannotRerollSkullException e) {
+			fail("CannotRerollSkullException should not have been thrown because not yet used.");
 		}
 
 		assertFalse(turn.canRerollASkull());
@@ -129,8 +129,22 @@ public class TurnTest {
 		try {
 			turn.rerollSingleSkull();
 
-			fail("SorceressExpiredException was not thrown when the reroll is reused.");
-		} catch (SorceressExpiredException exception) {
+			fail("CannotRerollSkullException was not thrown when the reroll is reused.");
+		} catch (CannotRerollSkullException exception) {
+		}
+	}
+
+	@Test
+	public void testRerollSingleSkullThrowsCannotRerollSkullExceptionIfNotSorceressFortuneCard() {
+		Turn turn = new Turn(new FortuneCard(FortuneCardType.GOLD));
+
+		turn.getDice().getAll().forEach(die -> die.setFace(DieFace.SKULL));
+
+		try {
+			turn.rerollSingleSkull();
+
+			fail("CannotRerollSkullException was not thrown but the Sorceress fortune card is not the active card.");
+		} catch (CannotRerollSkullException exception) {
 		}
 	}
 }
