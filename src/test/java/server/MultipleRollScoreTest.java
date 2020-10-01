@@ -302,4 +302,82 @@ public class MultipleRollScoreTest {
 		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard);
 		assertEquals(Integer.valueOf(500), evaluator.evaluate());
 	}
+
+	@Test
+	public void testRerollSkullSorceressFortuneCard() throws Exception {
+		DieFace[][] rollSequence = new DieFace[][] {
+				{ DieFace.COIN, DieFace.COIN, DieFace.PARROT, DieFace.PARROT, DieFace.PARROT, DieFace.PARROT,
+						DieFace.SWORD, DieFace.SWORD },
+				{ DieFace.COIN, DieFace.COIN, DieFace.COIN, DieFace.PARROT, DieFace.SKULL, DieFace.PARROT,
+						DieFace.SWORD, DieFace.SWORD } };
+
+		FortuneCard fortuneCard = new FortuneCard(FortuneCardType.DIAMOND);
+		Turn turn = new Turn(fortuneCard, rollSequence);
+
+		turn.getDice().getAll().get(0).setHeld(true);
+		turn.getDice().getAll().get(1).setHeld(true);
+
+		// First roll is done automatically
+		turn.rollDice();
+
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard);
+		assertEquals(Integer.valueOf(500), evaluator.evaluate());
+	}
+
+	@Test
+	public void testTwoMonkeysOneParrotTwoCoinsOneDiamondTwoSwordsSeveralRollsMonkeyBusinessFortuneCard()
+			throws Exception {
+		DieFace[][] rollSequence = new DieFace[][] {
+				{ DieFace.MONKEY, DieFace.MONKEY, DieFace.PARROT, DieFace.PARROT, DieFace.PARROT, DieFace.PARROT,
+						DieFace.SWORD, DieFace.SWORD },
+				{ DieFace.MONKEY, DieFace.MONKEY, DieFace.PARROT, DieFace.COIN, DieFace.PARROT, DieFace.PARROT,
+						DieFace.MONKEY, DieFace.SWORD },
+				{ DieFace.MONKEY, DieFace.MONKEY, DieFace.PARROT, DieFace.COIN, DieFace.COIN, DieFace.DIAMOND,
+						DieFace.SWORD, DieFace.SWORD } };
+
+		FortuneCard fortuneCard = new FortuneCard(FortuneCardType.MONKEY_BUSINESS);
+		Turn turn = new Turn(fortuneCard, rollSequence);
+
+		turn.getDice().getAll().get(0).setHeld(true);
+		turn.getDice().getAll().get(1).setHeld(true);
+
+		// First roll is done automatically
+		turn.rollDice();
+
+		turn.getDice().getAll().get(2).setHeld(true);
+		turn.getDice().getAll().get(3).setHeld(true);
+		turn.getDice().getAll().get(7).setHeld(true);
+
+		turn.rollDice();
+
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard);
+		assertEquals(Integer.valueOf(400), evaluator.evaluate());
+	}
+
+	@Test
+	public void testThreeMonkeysFourParrotsOneSwordSeveralRollsMonkeyBusinessFortuneCard() throws Exception {
+		DieFace[][] rollSequence = new DieFace[][] {
+				{ DieFace.MONKEY, DieFace.MONKEY, DieFace.PARROT, DieFace.PARROT, DieFace.COIN, DieFace.PARROT,
+						DieFace.SWORD, DieFace.SWORD },
+				{ DieFace.MONKEY, DieFace.MONKEY, DieFace.PARROT, DieFace.SWORD, DieFace.PARROT, DieFace.PARROT,
+						DieFace.MONKEY, DieFace.SWORD },
+				{ DieFace.MONKEY, DieFace.MONKEY, DieFace.MONKEY, DieFace.PARROT, DieFace.PARROT, DieFace.PARROT,
+						DieFace.PARROT, DieFace.SWORD } };
+
+		FortuneCard fortuneCard = new FortuneCard(FortuneCardType.MONKEY_BUSINESS);
+		Turn turn = new Turn(fortuneCard, rollSequence);
+
+		turn.getDice().getAll().get(0).setHeld(true);
+		turn.getDice().getAll().get(1).setHeld(true);
+
+		// First roll is done automatically
+		turn.rollDice();
+
+		turn.getDice().getAll().get(4).setHeld(true);
+
+		turn.rollDice();
+
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard);
+		assertEquals(Integer.valueOf(2000), evaluator.evaluate());
+	}
 }

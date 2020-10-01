@@ -135,6 +135,78 @@ public class TurnTest {
 	}
 
 	@Test
+	public void testRerollSingleSkullOnSecondRoundWithSorceressFortuneCard() throws Exception {
+		Turn turn = new Turn(new FortuneCard(FortuneCardType.SORCERESS));
+
+		List<Die> dice = turn.getDice().getAll();
+		dice.subList(0, 8).forEach(die -> {
+			die.setFace(DieFace.COIN);
+		});
+
+		turn.rollDice();
+
+		dice.subList(0, 8).forEach(die -> {
+			die.setFace(DieFace.COIN);
+		});
+
+		dice.get(0).setFace(DieFace.SKULL);
+
+		assertTrue(turn.canRerollASkull());
+
+		try {
+			turn.rerollSingleSkull();
+		} catch (FortuneCardInvalidException e) {
+			fail("FortuneCardInvalidException should not have been thrown because not yet used.");
+		}
+
+		assertFalse(turn.canRerollASkull());
+
+		try {
+			turn.rerollSingleSkull();
+
+			fail("FortuneCardInvalidException was not thrown when the reroll is reused.");
+		} catch (FortuneCardInvalidException exception) {
+		}
+	}
+
+	@Test
+	public void testRerollSingleSkullOnSecondRoundThenContinueWithSorceressFortuneCard() throws Exception {
+		Turn turn = new Turn(new FortuneCard(FortuneCardType.SORCERESS));
+
+		List<Die> dice = turn.getDice().getAll();
+		dice.subList(0, 8).forEach(die -> {
+			die.setFace(DieFace.COIN);
+		});
+
+		turn.rollDice();
+
+		dice.subList(0, 8).forEach(die -> {
+			die.setFace(DieFace.COIN);
+		});
+
+		dice.get(0).setFace(DieFace.SKULL);
+
+		assertTrue(turn.canRerollASkull());
+
+		try {
+			turn.rerollSingleSkull();
+		} catch (FortuneCardInvalidException e) {
+			fail("FortuneCardInvalidException should not have been thrown because not yet used.");
+		}
+
+		assertFalse(turn.canRerollASkull());
+
+		try {
+			turn.rerollSingleSkull();
+
+			fail("FortuneCardInvalidException was not thrown when the reroll is reused.");
+		} catch (FortuneCardInvalidException exception) {
+		}
+
+		turn.rollDice();
+	}
+
+	@Test
 	public void testRerollSingleSkullThrowsCannotRerollSkullExceptionIfNotSorceressFortuneCard() {
 		Turn turn = new Turn(new FortuneCard(FortuneCardType.GOLD));
 
