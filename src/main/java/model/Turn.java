@@ -40,7 +40,7 @@ public final class Turn {
 			throw new TurnCompleteException();
 		}
 
-		if (countHeldDice(dice.getAll()) > 6) {
+		if (countUnrollableDice(dice.getAll()) > 6) {
 			throw new InsufficientDiceException();
 		}
 
@@ -94,8 +94,9 @@ public final class Turn {
 		return rollSequence != null;
 	}
 
-	private Integer countHeldDice(List<Die> input) {
-		return input.stream().filter(die -> die.getIsHeld() || die.getInTreasureChest()).collect(Collectors.toList())
-				.size();
+	private Integer countUnrollableDice(List<Die> input) {
+		return input.stream()
+				.filter(die -> die.getIsHeld() || die.getInTreasureChest() || die.getFace() == DieFace.SKULL)
+				.collect(Collectors.toList()).size();
 	}
 }
