@@ -7,8 +7,10 @@ import java.util.stream.Collectors;
 public final class Turn {
 	private final FortuneCard fortuneCard;
 	private final Dice dice = new Dice();
+	private DieFace[][] rollSequence = null;
 
 	private Boolean sorceressFortuneCardExpired = false;
+	private Integer rollCount = 0;
 
 	public Turn() {
 		fortuneCard = new FortuneCard();
@@ -16,6 +18,13 @@ public final class Turn {
 
 	public Turn(FortuneCard fortuneCard) {
 		this.fortuneCard = fortuneCard;
+	}
+
+	public Turn(FortuneCard fortuneCard, DieFace[][] rollSequence) {
+		this.fortuneCard = fortuneCard;
+		this.rollSequence = rollSequence;
+
+		rigDice();
 	}
 
 	public Dice getDice() {
@@ -35,7 +44,14 @@ public final class Turn {
 			throw new InsufficientDiceException();
 		}
 
-		dice.rollUnheld();
+		rollCount++;
+
+		if (shouldRigDice()) {
+			rigDice();
+		} else {
+			dice.rollUnheld();
+		}
+
 	}
 
 	public Boolean turnCanContinue() {
@@ -62,6 +78,20 @@ public final class Turn {
 
 		firstSkull.get().roll();
 		sorceressFortuneCardExpired = true;
+	}
+
+	private void rigDice() {
+		for (int i = 0; i < dice.getAll().size(); i++) {
+			Die die = dice.getAll().get(i);
+
+			if ((die.getIsHeld() == false && die.getFace() != DieFace.SKULL) || rollCount == 0) {
+				die.setFace(rollSequence[rollCount][i]);
+			}
+		}
+	}
+
+	private Boolean shouldRigDice() {
+		return rollSequence != null;
 	}
 
 	private Integer countHeldDice(List<Die> input) {
