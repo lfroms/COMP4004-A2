@@ -133,6 +133,27 @@ public class ScoreEvaluatorTest {
 	}
 
 	@Test
+	public void testTwoDiamondsTwoCoinsWithCaptainFortuneCard() {
+		Dice dice = new Dice();
+		ScoreEvaluator evaluator = new ScoreEvaluator(dice, new FortuneCard(FortuneCardType.CAPTAIN));
+
+		dice.getAll().subList(0, 3).forEach(die -> {
+			die.setFace(DieFace.DIAMOND);
+		});
+		dice.getAll().subList(3, 5).forEach(die -> {
+			die.setFace(DieFace.COIN);
+		});
+
+		dice.getAll().get(3).setFace(DieFace.PARROT);
+		dice.getAll().get(4).setFace(DieFace.SKULL);
+		dice.getAll().get(5).setFace(DieFace.SKULL);
+		dice.getAll().get(6).setFace(DieFace.PARROT);
+		dice.getAll().get(7).setFace(DieFace.SWORD);
+
+		assertEquals(Integer.valueOf(800), evaluator.evaluate());
+	}
+
+	@Test
 	public void testFiveSwordsWithGoldFortuneCard() {
 		Dice dice = new Dice();
 		ScoreEvaluator evaluator = new ScoreEvaluator(dice, new FortuneCard(FortuneCardType.GOLD));
