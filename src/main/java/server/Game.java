@@ -121,7 +121,7 @@ final class Game {
 			return;
 		}
 
-		Integer points = new ScoreEvaluator(turn.getDice(), turn.getFortuneCard(), turn.isDisqualified()).evaluate();
+		Integer points = new ScoreEvaluator(turn).evaluate();
 
 		scoreCard.addNewScore(new Score(player.getId(), points));
 

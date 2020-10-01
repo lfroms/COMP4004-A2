@@ -88,7 +88,7 @@ public class MultipleRollScoreTest {
 
 		turn.rollDice();
 
-		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard, turn.isDisqualified());
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
 		assertEquals(Integer.valueOf(200), evaluator.evaluate());
 	}
 
@@ -110,7 +110,7 @@ public class MultipleRollScoreTest {
 		// First roll is done automatically
 		turn.rollDice();
 
-		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard, turn.isDisqualified());
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
 		assertEquals(Integer.valueOf(300), evaluator.evaluate());
 	}
 
@@ -135,7 +135,7 @@ public class MultipleRollScoreTest {
 		turn.rollDice();
 		turn.rollDice();
 
-		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard, turn.isDisqualified());
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
 		assertEquals(Integer.valueOf(800), evaluator.evaluate());
 	}
 
@@ -160,7 +160,7 @@ public class MultipleRollScoreTest {
 		turn.rollDice();
 		turn.rollDice();
 
-		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard, turn.isDisqualified());
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
 		assertEquals(Integer.valueOf(1200), evaluator.evaluate());
 	}
 
@@ -187,7 +187,7 @@ public class MultipleRollScoreTest {
 
 		turn.rollDice();
 
-		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard, turn.isDisqualified());
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
 		assertEquals(Integer.valueOf(600), evaluator.evaluate());
 	}
 
@@ -217,7 +217,7 @@ public class MultipleRollScoreTest {
 		turn.getDice().getAll().get(2).setHeld(true);
 		turn.rollDice();
 
-		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard, turn.isDisqualified());
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
 		assertEquals(Integer.valueOf(4600), evaluator.evaluate());
 	}
 
@@ -237,7 +237,7 @@ public class MultipleRollScoreTest {
 		// First roll is done automatically
 		turn.rollDice();
 
-		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard, turn.isDisqualified());
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
 		assertEquals(Integer.valueOf(400), evaluator.evaluate());
 	}
 
@@ -257,7 +257,7 @@ public class MultipleRollScoreTest {
 		// First roll is done automatically
 		turn.rollDice();
 
-		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard, turn.isDisqualified());
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
 		assertEquals(Integer.valueOf(500), evaluator.evaluate());
 	}
 
@@ -278,7 +278,7 @@ public class MultipleRollScoreTest {
 		// First roll is done automatically
 		turn.rollDice();
 
-		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard, turn.isDisqualified());
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
 		assertEquals(Integer.valueOf(600), evaluator.evaluate());
 	}
 
@@ -299,7 +299,7 @@ public class MultipleRollScoreTest {
 		// First roll is done automatically
 		turn.rollDice();
 
-		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard, turn.isDisqualified());
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
 		assertEquals(Integer.valueOf(500), evaluator.evaluate());
 	}
 
@@ -320,7 +320,7 @@ public class MultipleRollScoreTest {
 		// First roll is done automatically
 		turn.rollDice();
 
-		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard, turn.isDisqualified());
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
 		assertEquals(Integer.valueOf(500), evaluator.evaluate());
 	}
 
@@ -350,7 +350,7 @@ public class MultipleRollScoreTest {
 
 		turn.rollDice();
 
-		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard, turn.isDisqualified());
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
 		assertEquals(Integer.valueOf(400), evaluator.evaluate());
 	}
 
@@ -377,7 +377,7 @@ public class MultipleRollScoreTest {
 
 		turn.rollDice();
 
-		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard, turn.isDisqualified());
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
 		assertEquals(Integer.valueOf(2000), evaluator.evaluate());
 	}
 
@@ -422,7 +422,7 @@ public class MultipleRollScoreTest {
 
 		assertFalse(turn.isDisqualified());
 
-		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard, turn.isDisqualified());
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
 		assertEquals(Integer.valueOf(1100), evaluator.evaluate());
 	}
 
@@ -452,7 +452,7 @@ public class MultipleRollScoreTest {
 
 		assertTrue(turn.isDisqualified());
 
-		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard, turn.isDisqualified());
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
 		assertEquals(Integer.valueOf(600), evaluator.evaluate());
 	}
 }

@@ -7,16 +7,13 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import model.Dice;
 import model.Die;
 import model.DieFace;
-import model.FortuneCard;
 import model.FortuneCardType;
+import model.Turn;
 
 final class ScoreEvaluator {
-	private final Dice dice;
-	private final FortuneCard fortuneCard;
-	private final Boolean disqualified;
+	private final Turn turn;
 
 	private Integer points = 0;
 
@@ -26,22 +23,14 @@ final class ScoreEvaluator {
 	private Integer numberOfMonkeys = 0;
 	private Integer numberOfDiamonds = 0;
 
-	public ScoreEvaluator(Dice dice, FortuneCard fortuneCard) {
-		this.dice = dice;
-		this.fortuneCard = fortuneCard;
-		this.disqualified = false;
-	}
-
-	public ScoreEvaluator(Dice dice, FortuneCard fortuneCard, Boolean disqualified) {
-		this.dice = dice;
-		this.fortuneCard = fortuneCard;
-		this.disqualified = disqualified;
+	public ScoreEvaluator(Turn turn) {
+		this.turn = turn;
 	}
 
 	public Integer evaluate() {
 		countDiceTypes();
 
-		if (fortuneCard.getType() == FortuneCardType.MONKEY_BUSINESS) {
+		if (turn.getFortuneCard().getType() == FortuneCardType.MONKEY_BUSINESS) {
 			points += evaluateOfAKindPoints(numberOfParrots + numberOfMonkeys);
 		} else {
 			points += evaluateOfAKindPoints(numberOfParrots);
@@ -59,7 +48,7 @@ final class ScoreEvaluator {
 			points += 500;
 		}
 
-		if (fortuneCard.getType() == FortuneCardType.CAPTAIN) {
+		if (turn.getFortuneCard().getType() == FortuneCardType.CAPTAIN) {
 			points *= 2;
 		}
 
@@ -67,7 +56,7 @@ final class ScoreEvaluator {
 	}
 
 	private Boolean hasTreasureChest() {
-		return fortuneCard.getType() == FortuneCardType.TREASURE_CHEST;
+		return turn.getFortuneCard().getType() == FortuneCardType.TREASURE_CHEST;
 	}
 
 	private void countDiceTypes() {
@@ -79,11 +68,11 @@ final class ScoreEvaluator {
 		numberOfMonkeys = countDice(validDice, DieFace.MONKEY);
 		numberOfDiamonds = countDice(validDice, DieFace.DIAMOND);
 
-		if (fortuneCard.getType() == FortuneCardType.GOLD && numberOfCoins != 8) {
+		if (turn.getFortuneCard().getType() == FortuneCardType.GOLD && numberOfCoins != 8) {
 			numberOfCoins++;
 		}
 
-		if (fortuneCard.getType() == FortuneCardType.DIAMOND && numberOfDiamonds != 8) {
+		if (turn.getFortuneCard().getType() == FortuneCardType.DIAMOND && numberOfDiamonds != 8) {
 			numberOfDiamonds++;
 		}
 	}
@@ -123,7 +112,7 @@ final class ScoreEvaluator {
 	}
 
 	private Boolean diceHaveMatchingScorableFaces(Die first, Die second) {
-		if (fortuneCard.getType() != FortuneCardType.MONKEY_BUSINESS) {
+		if (turn.getFortuneCard().getType() != FortuneCardType.MONKEY_BUSINESS) {
 			return first.getFace() == second.getFace();
 		}
 
@@ -139,11 +128,11 @@ final class ScoreEvaluator {
 	}
 
 	private List<Die> diceToScore() {
-		if (hasTreasureChest() && disqualified) {
-			return dice.getAllFromTreasureChest();
+		if (hasTreasureChest() && turn.isDisqualified()) {
+			return turn.getDice().getAllFromTreasureChest();
 		}
 
-		return dice.getScorable();
+		return turn.getDice().getScorable();
 	}
 
 	private <T, X> List<X> filterByPredicate(List<X> input, Predicate<? super X> predicate) {
