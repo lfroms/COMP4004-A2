@@ -3,7 +3,9 @@ package server;
 import java.io.IOException;
 import java.util.List;
 
+import model.InsufficientDiceException;
 import model.Turn;
+import model.TurnCompleteException;
 
 final class Game {
 	private final List<Player> players;
@@ -32,11 +34,87 @@ final class Game {
 
 		player.printMessage("It is now your turn. Your fortune card is: " + turn.getFortuneCard().getType());
 
+		Boolean shouldLoop = true;
+
+		while (shouldLoop) {
+			printDice(turn, player);
+
+			if (!turn.turnCanContinue()) {
+				shouldLoop = false;
+				endTurn(turn, player);
+				continue;
+			}
+
+			printMenu(turn, player);
+
+			try {
+				String input = player.promptForInput();
+
+				switch (Integer.parseInt(input)) {
+				case 1:
+					holdOrUnholdDice(true, turn, player);
+					break;
+				case 2:
+					holdOrUnholdDice(false, turn, player);
+					break;
+				case 3:
+					turn.rollDice();
+					break;
+				case 4:
+					continue;
+				case 5:
+					shouldLoop = false;
+					endTurn(turn, player);
+					break;
+				}
+
+			} catch (IOException | InterruptedException e) {
+				e.printStackTrace();
+			} catch (TurnCompleteException e) {
+				player.printMessage("You can't reroll your dice because your turn is over.");
+			} catch (InsufficientDiceException e) {
+				player.printMessage("You can't reroll these dice. You must have at least 2 unheld dice.");
+			}
+		}
+	}
+
+	private void printMenu(Turn turn, Player player) {
+		player.printMessage("What would you like to do?");
+		player.printMessage("1) Select dice to hold.");
+		player.printMessage("2) Select dice to unhold.");
+		player.printMessage("3) Reroll unheld dice.");
+		player.printMessage("4) Reprint dice and menu.");
+		player.printMessage("5) Complete turn.");
+	}
+
+	private void printDice(Turn turn, Player player) {
+		player.printMessage("Here are your dice:");
+		player.printMessage(Printer.toString(turn.getDice()));
+	}
+
+	private void endTurn(Turn turn, Player player) {
+		Integer points = new ScoreEvaluator(turn.getDice(), turn.getFortuneCard()).evaluate();
+
+		player.printMessage("It is now your turn. Your fortune card is: " + turn.getFortuneCard().getType());
+
+		scoreCard.addNewScore(new Score(player.getId(), points));
+
+		player.printMessage("That's the end of your turn! You got " + points + " points.");
+		player.printMessage("Your total number of points is " + scoreCard.getCurrentScore(player.getId()) + ".");
+	}
+
+	private void holdOrUnholdDice(Boolean holdUnhold, Turn turn, Player player) {
+		player.printMessage("Enter a comma-separated list (no spaces) of dice to mark as held:");
+
 		try {
 			String input = player.promptForInput();
-			System.out.println(input);
+			String[] dice = input.split(",");
+
+			for (int i = 0; i < dice.length; i++) {
+				turn.getDice().getAll().get(Integer.parseInt(dice[i])).setHeld(holdUnhold);
+			}
+
 		} catch (IOException | InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
