@@ -18,4 +18,18 @@ public class FortuneCardTest {
 
 		assertEquals(FortuneCardType.DIAMOND, card.getType());
 	}
+
+	@Test
+	public void testGetNumericalValueReturnsZeroForUnsupportedCards() {
+		FortuneCard card = new FortuneCard(FortuneCardType.DIAMOND);
+
+		assertEquals(Integer.valueOf(0), card.getNumericalValue());
+	}
+
+	@Test
+	public void testGetNumericalValueReturnsNumericalValue() {
+		FortuneCard card = new FortuneCard(FortuneCardType.DIAMOND, 5);
+
+		assertEquals(Integer.valueOf(5), card.getNumericalValue());
+	}
 }
