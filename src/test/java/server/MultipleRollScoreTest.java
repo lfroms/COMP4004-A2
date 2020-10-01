@@ -22,13 +22,13 @@ public class MultipleRollScoreTest {
 
 		Turn turn = new Turn(new FortuneCard(FortuneCardType.GOLD), rollSequence);
 
-		assertTrue(turn.turnCanContinue());
+		assertFalse(turn.isDisqualified());
 
 		turn.getDice().getAll().stream().filter(die -> die.getFace() == DieFace.PARROT)
 				.forEach(die -> die.setHeld(true));
 
 		turn.rollDice();
-		assertFalse(turn.turnCanContinue());
+		assertTrue(turn.isDisqualified());
 	}
 
 	@Test
@@ -41,13 +41,13 @@ public class MultipleRollScoreTest {
 
 		Turn turn = new Turn(new FortuneCard(FortuneCardType.GOLD), rollSequence);
 
-		assertTrue(turn.turnCanContinue());
+		assertFalse(turn.isDisqualified());
 
 		turn.getDice().getAll().stream().filter(die -> die.getFace() == DieFace.PARROT)
 				.forEach(die -> die.setHeld(true));
 
 		turn.rollDice();
-		assertFalse(turn.turnCanContinue());
+		assertTrue(turn.isDisqualified());
 	}
 
 	@Test
@@ -62,17 +62,17 @@ public class MultipleRollScoreTest {
 
 		Turn turn = new Turn(new FortuneCard(FortuneCardType.GOLD), rollSequence);
 
-		assertTrue(turn.turnCanContinue());
+		assertFalse(turn.isDisqualified());
 
 		turn.getDice().getAll().stream().filter(die -> die.getFace() == DieFace.PARROT)
 				.forEach(die -> die.setHeld(true));
 
 		turn.rollDice();
-		assertTrue(turn.turnCanContinue());
+		assertFalse(turn.isDisqualified());
 
 		turn.rollDice();
 
-		assertFalse(turn.turnCanContinue());
+		assertTrue(turn.isDisqualified());
 	}
 
 	@Test

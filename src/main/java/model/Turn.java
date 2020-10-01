@@ -36,7 +36,7 @@ public final class Turn {
 	}
 
 	public void rollDice() throws TurnCompleteException, InsufficientDiceException {
-		if (!turnCanContinue()) {
+		if (isDisqualified()) {
 			throw new TurnCompleteException();
 		}
 
@@ -54,11 +54,11 @@ public final class Turn {
 
 	}
 
-	public Boolean turnCanContinue() {
+	public Boolean isDisqualified() {
 		Integer numberOfSkulls = dice.getAll().stream().filter(die -> die.getFace() == DieFace.SKULL)
 				.collect(Collectors.toList()).size();
 
-		return numberOfSkulls < 3;
+		return numberOfSkulls > 2;
 	}
 
 	public Boolean canRerollASkull() {

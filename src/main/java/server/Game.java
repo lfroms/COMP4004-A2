@@ -39,7 +39,7 @@ final class Game {
 		while (shouldLoop) {
 			printDice(turn, player);
 
-			if (!turn.turnCanContinue()) {
+			if (turn.isDisqualified()) {
 				shouldLoop = false;
 				endTurn(turn, player);
 				continue;

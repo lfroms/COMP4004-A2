@@ -8,7 +8,7 @@ import org.junit.Test;
 
 public class TurnTest {
 	@Test
-	public void testTurnCanContinueIsTrueIfLessThanThreeSkulls() {
+	public void testIsDisqualifiedIsFalseIfLessThanThreeSkulls() {
 		Turn turn = new Turn();
 
 		List<Die> dice = turn.getDice().getAll();
@@ -18,11 +18,11 @@ public class TurnTest {
 
 		dice.get(0).setFace(DieFace.SKULL);
 
-		assertTrue(turn.turnCanContinue());
+		assertFalse(turn.isDisqualified());
 	}
 
 	@Test
-	public void testTurnCanContinueIsFalseIfAtLeastThreeSkulls() {
+	public void testIsDisqualifiedIsTrueIfAtLeastThreeSkulls() {
 		Turn turn = new Turn();
 
 		List<Die> dice = turn.getDice().getAll();
@@ -32,7 +32,7 @@ public class TurnTest {
 
 		dice.get(0).setFace(DieFace.DIAMOND);
 
-		assertFalse(turn.turnCanContinue());
+		assertTrue(turn.isDisqualified());
 	}
 
 	@Test
