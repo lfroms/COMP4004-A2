@@ -88,7 +88,7 @@ public class MultipleRollScoreTest {
 
 		turn.rollDice();
 
-		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard);
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard, turn.isDisqualified());
 		assertEquals(Integer.valueOf(200), evaluator.evaluate());
 	}
 
@@ -110,7 +110,7 @@ public class MultipleRollScoreTest {
 		// First roll is done automatically
 		turn.rollDice();
 
-		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard);
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard, turn.isDisqualified());
 		assertEquals(Integer.valueOf(300), evaluator.evaluate());
 	}
 
@@ -135,7 +135,7 @@ public class MultipleRollScoreTest {
 		turn.rollDice();
 		turn.rollDice();
 
-		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard);
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard, turn.isDisqualified());
 		assertEquals(Integer.valueOf(800), evaluator.evaluate());
 	}
 
@@ -160,7 +160,7 @@ public class MultipleRollScoreTest {
 		turn.rollDice();
 		turn.rollDice();
 
-		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard);
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard, turn.isDisqualified());
 		assertEquals(Integer.valueOf(1200), evaluator.evaluate());
 	}
 
@@ -187,7 +187,7 @@ public class MultipleRollScoreTest {
 
 		turn.rollDice();
 
-		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard);
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard, turn.isDisqualified());
 		assertEquals(Integer.valueOf(600), evaluator.evaluate());
 	}
 
@@ -217,7 +217,7 @@ public class MultipleRollScoreTest {
 		turn.getDice().getAll().get(2).setHeld(true);
 		turn.rollDice();
 
-		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard);
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard, turn.isDisqualified());
 		assertEquals(Integer.valueOf(4600), evaluator.evaluate());
 	}
 
@@ -237,7 +237,7 @@ public class MultipleRollScoreTest {
 		// First roll is done automatically
 		turn.rollDice();
 
-		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard);
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard, turn.isDisqualified());
 		assertEquals(Integer.valueOf(400), evaluator.evaluate());
 	}
 
@@ -257,7 +257,7 @@ public class MultipleRollScoreTest {
 		// First roll is done automatically
 		turn.rollDice();
 
-		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard);
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard, turn.isDisqualified());
 		assertEquals(Integer.valueOf(500), evaluator.evaluate());
 	}
 
@@ -278,7 +278,7 @@ public class MultipleRollScoreTest {
 		// First roll is done automatically
 		turn.rollDice();
 
-		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard);
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard, turn.isDisqualified());
 		assertEquals(Integer.valueOf(600), evaluator.evaluate());
 	}
 
@@ -299,7 +299,7 @@ public class MultipleRollScoreTest {
 		// First roll is done automatically
 		turn.rollDice();
 
-		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard);
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard, turn.isDisqualified());
 		assertEquals(Integer.valueOf(500), evaluator.evaluate());
 	}
 
@@ -320,7 +320,7 @@ public class MultipleRollScoreTest {
 		// First roll is done automatically
 		turn.rollDice();
 
-		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard);
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard, turn.isDisqualified());
 		assertEquals(Integer.valueOf(500), evaluator.evaluate());
 	}
 
@@ -350,7 +350,7 @@ public class MultipleRollScoreTest {
 
 		turn.rollDice();
 
-		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard);
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard, turn.isDisqualified());
 		assertEquals(Integer.valueOf(400), evaluator.evaluate());
 	}
 
@@ -377,7 +377,82 @@ public class MultipleRollScoreTest {
 
 		turn.rollDice();
 
-		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard);
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard, turn.isDisqualified());
 		assertEquals(Integer.valueOf(2000), evaluator.evaluate());
+	}
+
+	@Test
+	public void testTreasureChestScenarioA() throws Exception {
+		DieFace[][] rollSequence = new DieFace[][] {
+				{ DieFace.PARROT, DieFace.PARROT, DieFace.PARROT, DieFace.SWORD, DieFace.SWORD, DieFace.DIAMOND,
+						DieFace.DIAMOND, DieFace.COIN },
+				{ DieFace.PARROT, DieFace.PARROT, DieFace.PARROT, DieFace.PARROT, DieFace.PARROT, DieFace.DIAMOND,
+						DieFace.DIAMOND, DieFace.COIN },
+				{ DieFace.PARROT, DieFace.PARROT, DieFace.PARROT, DieFace.PARROT, DieFace.PARROT, DieFace.SKULL,
+						DieFace.COIN, DieFace.PARROT } };
+
+		FortuneCard fortuneCard = new FortuneCard(FortuneCardType.TREASURE_CHEST);
+		Turn turn = new Turn(fortuneCard, rollSequence);
+
+		turn.getDice().getAll().get(0).setHeld(true);
+		turn.getDice().getAll().get(1).setHeld(true);
+		turn.getDice().getAll().get(2).setHeld(true);
+
+		turn.getDice().getAll().get(5).setInTreasureChest(true);
+		turn.getDice().getAll().get(6).setInTreasureChest(true);
+		turn.getDice().getAll().get(7).setInTreasureChest(true);
+
+		// First roll is done automatically
+		turn.rollDice();
+
+		turn.getDice().getAll().get(5).setInTreasureChest(false);
+		turn.getDice().getAll().get(6).setInTreasureChest(false);
+		turn.getDice().getAll().get(7).setInTreasureChest(false);
+
+		turn.getDice().getAll().get(0).setInTreasureChest(true);
+		turn.getDice().getAll().get(1).setInTreasureChest(true);
+		turn.getDice().getAll().get(2).setInTreasureChest(true);
+		turn.getDice().getAll().get(3).setInTreasureChest(true);
+		turn.getDice().getAll().get(4).setInTreasureChest(true);
+
+		turn.rollDice();
+
+		turn.getDice().getAll().get(6).setInTreasureChest(true);
+		turn.getDice().getAll().get(7).setInTreasureChest(true);
+
+		assertFalse(turn.isDisqualified());
+
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard, turn.isDisqualified());
+		assertEquals(Integer.valueOf(1100), evaluator.evaluate());
+	}
+
+	@Test
+	public void testTreasureChestScenarioB() throws Exception {
+		DieFace[][] rollSequence = new DieFace[][] {
+				{ DieFace.SKULL, DieFace.SKULL, DieFace.PARROT, DieFace.PARROT, DieFace.PARROT, DieFace.COIN,
+						DieFace.COIN, DieFace.COIN },
+				{ DieFace.SKULL, DieFace.SKULL, DieFace.DIAMOND, DieFace.DIAMOND, DieFace.COIN, DieFace.COIN,
+						DieFace.COIN, DieFace.COIN },
+				{ DieFace.SKULL, DieFace.SKULL, DieFace.SKULL, DieFace.COIN, DieFace.COIN, DieFace.COIN, DieFace.COIN,
+						DieFace.COIN } };
+
+		FortuneCard fortuneCard = new FortuneCard(FortuneCardType.TREASURE_CHEST);
+		Turn turn = new Turn(fortuneCard, rollSequence);
+
+		turn.getDice().getAll().get(5).setInTreasureChest(true);
+		turn.getDice().getAll().get(6).setInTreasureChest(true);
+		turn.getDice().getAll().get(7).setInTreasureChest(true);
+
+		// First roll is done automatically
+		turn.rollDice();
+
+		turn.getDice().getAll().get(4).setInTreasureChest(true);
+
+		turn.rollDice();
+
+		assertTrue(turn.isDisqualified());
+
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn.getDice(), fortuneCard, turn.isDisqualified());
+		assertEquals(Integer.valueOf(600), evaluator.evaluate());
 	}
 }

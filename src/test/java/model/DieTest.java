@@ -37,4 +37,20 @@ public class DieTest {
 		die.setHeld(false);
 		assertFalse(die.getIsHeld());
 	}
+
+	@Test
+	public void testSetInTreasureChestSetsInTreasureChestToTrue() {
+		Die die = new Die();
+
+		die.setInTreasureChest(true);
+		assertTrue(die.getInTreasureChest());
+	}
+
+	@Test
+	public void testSetInTreasureChestSetsInTreasureChestToFalse() {
+		Die die = new Die();
+
+		die.setInTreasureChest(false);
+		assertFalse(die.getInTreasureChest());
+	}
 }
