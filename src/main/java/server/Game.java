@@ -3,6 +3,7 @@ package server;
 import java.io.IOException;
 import java.util.List;
 
+import model.FortuneCardInvalidException;
 import model.FortuneCardType;
 import model.InsufficientDiceException;
 import model.Turn;
@@ -52,6 +53,9 @@ final class Game {
 				String input = player.promptForInput();
 
 				switch (Integer.parseInt(input)) {
+				case 0:
+					turn.rerollSingleSkull();
+					break;
 				case 1:
 					holdOrUnholdDice(true, turn, player);
 					break;
@@ -81,12 +85,19 @@ final class Game {
 				player.printMessage("You can't reroll your dice because your turn is over.");
 			} catch (InsufficientDiceException e) {
 				player.printMessage("You can't reroll these dice. You must have at least 2 unheld dice.");
+			} catch (FortuneCardInvalidException e) {
+				player.printMessage("You can't perform this action because you do not have the correct fortune card.");
 			}
 		}
 	}
 
 	private void printMenu(Turn turn, Player player) {
 		player.printMessage("What would you like to do?");
+
+		if (turn.canRerollASkull()) {
+			player.printMessage("0) Reroll a skull.");
+		}
+
 		player.printMessage("1) Select dice to hold.");
 		player.printMessage("2) Select dice to unhold.");
 		player.printMessage("3) Reroll unheld dice.");
