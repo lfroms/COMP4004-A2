@@ -36,7 +36,7 @@ public class TurnTest {
 	}
 
 	@Test
-	public void testRollDiceThrowsTurnCompleteExceptionIfCannotContinue() throws InsufficientDiceException {
+	public void testRollDiceThrowsTurnCompleteExceptionIfCannotContinue() {
 		Turn turn = new Turn();
 
 		List<Die> dice = turn.getDice().getAll();
@@ -49,11 +49,12 @@ public class TurnTest {
 
 			fail("TurnCompleteException was not thrown when the turn was complete");
 		} catch (TurnCompleteException exception) {
+		} catch (InsufficientDiceException exception) {
 		}
 	}
 
 	@Test
-	public void testRollDiceDoesNotThrowTurnCompleteExceptionIfCanContinue() throws InsufficientDiceException {
+	public void testRollDiceDoesNotThrowTurnCompleteExceptionIfCanContinue() {
 		Turn turn = new Turn();
 
 		List<Die> dice = turn.getDice().getAll();
@@ -65,11 +66,12 @@ public class TurnTest {
 			turn.rollDice();
 		} catch (TurnCompleteException exception) {
 			fail("TurnCompleteException was thrown when the turn was not complete");
+		} catch (InsufficientDiceException exception) {
 		}
 	}
 
 	@Test
-	public void testRollDiceThrowsInsufficientDiceExceptionIfInsufficientDice() throws TurnCompleteException {
+	public void testRollDiceThrowsInsufficientDiceExceptionIfInsufficientDice() {
 		Turn turn = new Turn();
 
 		List<Die> dice = turn.getDice().getAll();
@@ -83,11 +85,12 @@ public class TurnTest {
 
 			fail("InsufficientDiceException was not thrown when there were insufficient dice");
 		} catch (InsufficientDiceException exception) {
+		} catch (TurnCompleteException exception) {
 		}
 	}
 
 	@Test
-	public void testRollDiceDoesNotThrowInsufficientDiceExceptionIfSufficientDice() throws TurnCompleteException {
+	public void testRollDiceDoesNotThrowInsufficientDiceExceptionIfSufficientDice() {
 		Turn turn = new Turn();
 
 		List<Die> dice = turn.getDice().getAll();
@@ -100,6 +103,7 @@ public class TurnTest {
 			turn.rollDice();
 		} catch (InsufficientDiceException exception) {
 			fail("InsufficientDiceException was thrown when there were sufficient dice");
+		} catch (TurnCompleteException exception) {
 		}
 	}
 
