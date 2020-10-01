@@ -13,7 +13,9 @@ final class Printer {
 
 			String heldText = die.getIsHeld() ? " (HELD)" : "";
 			String cannotRollText = die.getFace() == DieFace.SKULL ? " (cannot re-roll)" : "";
-			sb.append(i + ". " + die.getFace() + heldText + cannotRollText + "\n");
+			String treasureChestText = die.getInTreasureChest() ? " (TREASURE CHEST)" : "";
+
+			sb.append(i + ". " + die.getFace() + heldText + cannotRollText + treasureChestText + "\n");
 		}
 
 		return sb.toString();

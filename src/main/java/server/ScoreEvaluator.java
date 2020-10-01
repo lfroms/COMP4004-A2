@@ -16,6 +16,7 @@ import model.FortuneCardType;
 final class ScoreEvaluator {
 	private final Dice dice;
 	private final FortuneCard fortuneCard;
+	private final Boolean disqualified;
 
 	private Integer points = 0;
 
@@ -28,6 +29,13 @@ final class ScoreEvaluator {
 	public ScoreEvaluator(Dice dice, FortuneCard fortuneCard) {
 		this.dice = dice;
 		this.fortuneCard = fortuneCard;
+		this.disqualified = false;
+	}
+
+	public ScoreEvaluator(Dice dice, FortuneCard fortuneCard, Boolean disqualified) {
+		this.dice = dice;
+		this.fortuneCard = fortuneCard;
+		this.disqualified = disqualified;
 	}
 
 	public Integer evaluate() {
@@ -58,8 +66,12 @@ final class ScoreEvaluator {
 		return points;
 	}
 
+	private Boolean hasTreasureChest() {
+		return fortuneCard.getType() == FortuneCardType.TREASURE_CHEST;
+	}
+
 	private void countDiceTypes() {
-		List<Die> validDice = getNonSkullDice();
+		List<Die> validDice = diceToScore();
 
 		numberOfParrots = countDice(validDice, DieFace.PARROT);
 		numberOfSwords = countDice(validDice, DieFace.SWORD);
@@ -95,13 +107,11 @@ final class ScoreEvaluator {
 	}
 
 	private Boolean isFullChest() {
-		Boolean hasNoSkulls = dice.getAll().stream().allMatch(die -> die.getFace() != DieFace.SKULL);
-
-		if (!hasNoSkulls) {
+		if (diceToScore().size() < 8) {
 			return false;
 		}
 
-		return dice.getAll().stream().filter(die -> !dieHasFaceValue(die)).allMatch(die -> dieIsPartOfSet(die));
+		return diceToScore().stream().filter(die -> !dieHasFaceValue(die)).allMatch(die -> dieIsPartOfSet(die));
 	}
 
 	private boolean dieHasFaceValue(Die die) {
@@ -109,7 +119,7 @@ final class ScoreEvaluator {
 	}
 
 	private Boolean dieIsPartOfSet(Die die) {
-		return dice.getAll().stream().filter(otherDie -> diceHaveMatchingScorableFaces(die, otherDie)).count() > 2;
+		return diceToScore().stream().filter(otherDie -> diceHaveMatchingScorableFaces(die, otherDie)).count() > 2;
 	}
 
 	private Boolean diceHaveMatchingScorableFaces(Die first, Die second) {
@@ -128,8 +138,12 @@ final class ScoreEvaluator {
 		return filterByPredicate(input, die -> die.getFace() == face).size();
 	}
 
-	private List<Die> getNonSkullDice() {
-		return filterByPredicate(dice.getAll(), die -> die.getFace() != DieFace.SKULL);
+	private List<Die> diceToScore() {
+		if (hasTreasureChest() && disqualified) {
+			return dice.getAllFromTreasureChest();
+		}
+
+		return dice.getScorable();
 	}
 
 	private <T, X> List<X> filterByPredicate(List<X> input, Predicate<? super X> predicate) {

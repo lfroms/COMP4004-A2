@@ -3,6 +3,7 @@ package model;
 public final class Die {
 	private DieFace face;
 	private Boolean isHeld = false;
+	private Boolean inTreasureChest = false;
 
 	public Die() {
 		face = DieFace.random();
@@ -28,5 +29,13 @@ public final class Die {
 
 	public void setHeld(Boolean isHeld) {
 		this.isHeld = isHeld;
+	}
+
+	public Boolean getInTreasureChest() {
+		return inTreasureChest;
+	}
+
+	public void setInTreasureChest(Boolean inTreasureChest) {
+		this.inTreasureChest = inTreasureChest;
 	}
 }

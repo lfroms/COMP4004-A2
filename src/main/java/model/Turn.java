@@ -95,6 +95,7 @@ public final class Turn {
 	}
 
 	private Integer countHeldDice(List<Die> input) {
-		return input.stream().filter(die -> die.getIsHeld()).collect(Collectors.toList()).size();
+		return input.stream().filter(die -> die.getIsHeld() || die.getInTreasureChest()).collect(Collectors.toList())
+				.size();
 	}
 }

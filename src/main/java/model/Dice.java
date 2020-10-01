@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public final class Dice {
 	private List<Die> dice = new ArrayList<Die>();
@@ -16,9 +17,17 @@ public final class Dice {
 		return dice;
 	}
 
+	public List<Die> getScorable() {
+		return dice.stream().filter(die -> die.getFace() != DieFace.SKULL).collect(Collectors.toList());
+	}
+
+	public List<Die> getAllFromTreasureChest() {
+		return dice.stream().filter(die -> die.getInTreasureChest()).collect(Collectors.toList());
+	}
+
 	public void rollUnheld() {
 		dice.forEach((die) -> {
-			if (!die.getIsHeld() && (die.getFace() != DieFace.SKULL)) {
+			if (!die.getIsHeld() && (die.getFace() != DieFace.SKULL) && !die.getInTreasureChest()) {
 				die.roll();
 			}
 		});

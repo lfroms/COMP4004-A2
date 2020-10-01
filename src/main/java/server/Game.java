@@ -3,6 +3,7 @@ package server;
 import java.io.IOException;
 import java.util.List;
 
+import model.FortuneCardType;
 import model.InsufficientDiceException;
 import model.Turn;
 import model.TurnCompleteException;
@@ -66,6 +67,12 @@ final class Game {
 					shouldLoop = false;
 					endTurn(turn, player);
 					break;
+				case 6:
+					addOrRemoveFromTreasureChest(true, turn, player);
+					break;
+				case 7:
+					addOrRemoveFromTreasureChest(false, turn, player);
+					break;
 				}
 
 			} catch (IOException | InterruptedException e) {
@@ -85,6 +92,11 @@ final class Game {
 		player.printMessage("3) Reroll unheld dice.");
 		player.printMessage("4) Reprint dice and menu.");
 		player.printMessage("5) Complete turn.");
+
+		if (turn.getFortuneCard().getType() == FortuneCardType.TREASURE_CHEST) {
+			player.printMessage("6) Select dice to add to treasure chest.");
+			player.printMessage("7) Select dice to remove from treasure chest.");
+		}
 	}
 
 	private void printDice(Turn turn, Player player) {
@@ -93,9 +105,12 @@ final class Game {
 	}
 
 	private void endTurn(Turn turn, Player player) {
-		Integer points = new ScoreEvaluator(turn.getDice(), turn.getFortuneCard()).evaluate();
+		if (turn.isDisqualified() && !(turn.getFortuneCard().getType() == FortuneCardType.TREASURE_CHEST)) {
+			player.printMessage("That's the end of your turn! You got no points because you rolled 3 skulls.");
+			return;
+		}
 
-		player.printMessage("It is now your turn. Your fortune card is: " + turn.getFortuneCard().getType());
+		Integer points = new ScoreEvaluator(turn.getDice(), turn.getFortuneCard(), turn.isDisqualified()).evaluate();
 
 		scoreCard.addNewScore(new Score(player.getId(), points));
 
@@ -112,6 +127,23 @@ final class Game {
 
 			for (int i = 0; i < dice.length; i++) {
 				turn.getDice().getAll().get(Integer.parseInt(dice[i])).setHeld(holdUnhold);
+			}
+
+		} catch (IOException | InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void addOrRemoveFromTreasureChest(Boolean addRemove, Turn turn, Player player) {
+		player.printMessage(
+				"Enter a comma-separated list (no spaces) of dice to add or remove from the treasure chest:");
+
+		try {
+			String input = player.promptForInput();
+			String[] dice = input.split(",");
+
+			for (int i = 0; i < dice.length; i++) {
+				turn.getDice().getAll().get(Integer.parseInt(dice[i])).setInTreasureChest(addRemove);
 			}
 
 		} catch (IOException | InterruptedException e) {
