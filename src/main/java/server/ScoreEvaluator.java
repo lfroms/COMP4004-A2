@@ -66,6 +66,32 @@ final class ScoreEvaluator {
 		return turn.getFortuneCard().getType() == FortuneCardType.TREASURE_CHEST;
 	}
 
+	public Integer seaBattleBonusPoints() {
+		if (!turn.getIsInSeaBattle()) {
+			return 0;
+		}
+
+		Integer value = 0;
+
+		switch (turn.getFortuneCard().getNumericalValue()) {
+		case 2:
+			value = 300;
+			break;
+		case 3:
+			value = 500;
+			break;
+		case 4:
+			value = 1000;
+			break;
+		}
+
+		if (turn.wonSeaBattle() && !turn.isDisqualified()) {
+			return value;
+		} else {
+			return -1 * value;
+		}
+	}
+
 	private void countDiceTypes() {
 		List<Die> validDice = diceToScore();
 
@@ -115,7 +141,10 @@ final class ScoreEvaluator {
 	}
 
 	private Boolean dieIsPartOfSet(Die die) {
-		return diceToScore().stream().filter(otherDie -> diceHaveMatchingScorableFaces(die, otherDie)).count() > 2;
+		Boolean dieIsPartOfSeaBattle = turn.wonSeaBattle() && die.getFace() == DieFace.SWORD;
+
+		return diceToScore().stream().filter(otherDie -> diceHaveMatchingScorableFaces(die, otherDie)).count() > 2
+				|| dieIsPartOfSeaBattle;
 	}
 
 	private Boolean diceHaveMatchingScorableFaces(Die first, Die second) {

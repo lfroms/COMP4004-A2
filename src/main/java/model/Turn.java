@@ -11,17 +11,17 @@ public final class Turn {
 
 	private Boolean sorceressFortuneCardExpired = false;
 	private Integer rollCount = 0;
-	private Boolean isIslandOfSkulls = false;
+	private final Boolean isIslandOfSkulls;
 	private Integer previousNumberOfSkulls = 0;
 
 	public Turn() {
 		fortuneCard = new FortuneCard();
-		this.isIslandOfSkulls = numberOfSkulls() >= 4;
+		this.isIslandOfSkulls = numberOfSkulls() >= 4 && !getIsInSeaBattle();
 	}
 
 	public Turn(FortuneCard fortuneCard) {
 		this.fortuneCard = fortuneCard;
-		this.isIslandOfSkulls = numberOfSkulls() >= 4;
+		this.isIslandOfSkulls = numberOfSkulls() >= 4 && !getIsInSeaBattle();
 
 	}
 
@@ -31,7 +31,7 @@ public final class Turn {
 
 		rigDice();
 
-		this.isIslandOfSkulls = numberOfSkulls() >= 4;
+		this.isIslandOfSkulls = numberOfSkulls() >= 4 && !getIsInSeaBattle();
 	}
 
 	public Dice getDice() {
@@ -44,6 +44,18 @@ public final class Turn {
 
 	public Boolean getIsIslandOfSkulls() {
 		return isIslandOfSkulls;
+	}
+
+	public Boolean getIsInSeaBattle() {
+		return fortuneCard.getType() == FortuneCardType.SEA_BATTLE;
+	}
+
+	public Boolean wonSeaBattle() {
+		if (!getIsInSeaBattle() || isDisqualified()) {
+			return false;
+		}
+
+		return numberOfSwords() >= fortuneCard.getNumericalValue();
 	}
 
 	public void rollDice() throws TurnCompleteException, InsufficientDiceException {
@@ -122,6 +134,9 @@ public final class Turn {
 		}
 
 		return numberOfSkulls;
+	}
 
+	private Integer numberOfSwords() {
+		return dice.getAll().stream().filter(die -> die.getFace() == DieFace.SWORD).collect(Collectors.toList()).size();
 	}
 }
