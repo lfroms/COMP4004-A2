@@ -5,6 +5,12 @@
   <version>0.0.1</version>
   <name>COMP4004-A1</name>
   <description>Pirates game for COMP4004 assignment 1</description>
+  
+  <properties>
+      <maven.compiler.source>13</maven.compiler.source>
+      <maven.compiler.target>13</maven.compiler.target>
+  </properties>
+  
   <dependencies>
   	<dependency>
   		<groupId>junit</groupId>
