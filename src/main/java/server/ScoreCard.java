@@ -44,13 +44,10 @@ final class ScoreCard {
 		Integer numberOfPlayers = scores.stream().filter(distinctByKey(p -> p.getPlayerId()))
 				.collect(Collectors.toList()).size();
 
-		for (int i = 0; i < numberOfPlayers; i++) {
+		for (int i = 0; i <= numberOfPlayers; i++) {
 			final Integer id = i + 1;
 
-			Integer playerTotal = scores.stream().filter(s -> s.getPlayerId() == id).reduce(0,
-					(accumulator, object) -> accumulator + object.getScore(), Integer::sum);
-
-			if (playerTotal >= 6000) {
+			if (getCurrentScore(id) >= 6000) {
 				return Optional.of(id);
 			}
 		}

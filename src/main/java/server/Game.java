@@ -13,9 +13,18 @@ import model.TurnCompleteException;
 final class Game {
 	private final List<Player> players;
 	private final ScoreCard scoreCard = new ScoreCard();
+	private final GameTestMode testMode;
+
+	private Integer turnSequence = 0;
 
 	public Game(List<Player> players) {
 		this.players = players;
+		this.testMode = null;
+	}
+
+	public Game(List<Player> players, GameTestMode testMode) {
+		this.players = players;
+		this.testMode = testMode;
 	}
 
 	public void loop() {
@@ -26,6 +35,7 @@ final class Game {
 			players.forEach(player -> {
 				alertOtherPlayersOfTurn(player);
 				turnForPlayer(player);
+				turnSequence++;
 			});
 		}
 
@@ -33,7 +43,7 @@ final class Game {
 	}
 
 	private void turnForPlayer(Player player) {
-		Turn turn = new Turn();
+		Turn turn = testMode == null ? new Turn() : new TestTurnFactory(testMode, turnSequence).createTurn();
 
 		player.printMessage("");
 		player.printMessage("It is now your turn. Your fortune card is: " + turn.getFortuneCard().getType());
