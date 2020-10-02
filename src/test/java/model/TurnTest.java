@@ -223,4 +223,26 @@ public class TurnTest {
 		} catch (FortuneCardInvalidException exception) {
 		}
 	}
+
+	@Test
+	public void testDisqualifiedIsTrueIfOneSkullAndTwoSkullFortuneCard() throws Exception {
+		DieFace[][] rollSequence = new DieFace[][] { { DieFace.SKULL, DieFace.PARROT, DieFace.PARROT, DieFace.PARROT,
+				DieFace.PARROT, DieFace.PARROT, DieFace.COIN, DieFace.COIN } };
+
+		FortuneCard fortuneCard = new FortuneCard(FortuneCardType.SKULLS, 2);
+		Turn turn = new Turn(fortuneCard, rollSequence);
+
+		assertTrue(turn.isDisqualified());
+	}
+
+	@Test
+	public void testDisqualifiedIsTrueIfTwoSkullsAndOneSkullFortuneCard() throws Exception {
+		DieFace[][] rollSequence = new DieFace[][] { { DieFace.SKULL, DieFace.SKULL, DieFace.PARROT, DieFace.PARROT,
+				DieFace.PARROT, DieFace.PARROT, DieFace.COIN, DieFace.COIN } };
+
+		FortuneCard fortuneCard = new FortuneCard(FortuneCardType.SKULLS, 1);
+		Turn turn = new Turn(fortuneCard, rollSequence);
+
+		assertTrue(turn.isDisqualified());
+	}
 }

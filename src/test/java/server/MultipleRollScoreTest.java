@@ -455,4 +455,87 @@ public class MultipleRollScoreTest {
 		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
 		assertEquals(Integer.valueOf(600), evaluator.evaluate());
 	}
+
+	@Test
+	public void testRollTwoSkullsWithTwoSkullFortuneCard() throws Exception {
+		DieFace[][] rollSequence = new DieFace[][] {
+				{ DieFace.SKULL, DieFace.SKULL, DieFace.PARROT, DieFace.PARROT, DieFace.PARROT, DieFace.COIN,
+						DieFace.COIN, DieFace.COIN },
+				{ DieFace.SKULL, DieFace.SKULL, DieFace.SKULL, DieFace.SKULL, DieFace.COIN, DieFace.COIN, DieFace.COIN,
+						DieFace.COIN },
+				{ DieFace.SKULL, DieFace.SKULL, DieFace.SKULL, DieFace.SKULL, DieFace.SKULL, DieFace.COIN, DieFace.COIN,
+						DieFace.COIN } };
+
+		FortuneCard fortuneCard = new FortuneCard(FortuneCardType.SKULLS, 2);
+		Turn turn = new Turn(fortuneCard, rollSequence);
+
+		assertTrue(turn.getIsIslandOfSkulls());
+		assertFalse(turn.isDisqualified());
+
+		turn.rollDice();
+
+		assertTrue(turn.getIsIslandOfSkulls());
+		assertFalse(turn.isDisqualified());
+
+		turn.rollDice();
+
+		assertTrue(turn.getIsIslandOfSkulls());
+		assertFalse(turn.isDisqualified());
+
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
+		assertEquals(Integer.valueOf(700), evaluator.evaluate());
+	}
+
+	@Test
+	public void testRollThreeSkullsWithTwoSkullFortuneCardAndNoSkullsOnSecondRoll() throws Exception {
+		DieFace[][] rollSequence = new DieFace[][] {
+				{ DieFace.SKULL, DieFace.SKULL, DieFace.SKULL, DieFace.PARROT, DieFace.PARROT, DieFace.COIN,
+						DieFace.COIN, DieFace.COIN },
+				{ DieFace.SKULL, DieFace.SKULL, DieFace.SKULL, DieFace.PARROT, DieFace.PARROT, DieFace.COIN,
+						DieFace.COIN, DieFace.COIN } };
+
+		FortuneCard fortuneCard = new FortuneCard(FortuneCardType.SKULLS, 2);
+		Turn turn = new Turn(fortuneCard, rollSequence);
+
+		assertTrue(turn.getIsIslandOfSkulls());
+		assertFalse(turn.isDisqualified());
+
+		turn.rollDice();
+
+		assertTrue(turn.getIsIslandOfSkulls());
+		assertTrue(turn.isDisqualified());
+
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
+		assertEquals(Integer.valueOf(500), evaluator.evaluate());
+	}
+
+	@Test
+	public void testRollThreeSkullsWithOneSkullFortuneCardAndNoSkullsOnSecondRoll() throws Exception {
+		DieFace[][] rollSequence = new DieFace[][] {
+				{ DieFace.SKULL, DieFace.SKULL, DieFace.SKULL, DieFace.PARROT, DieFace.PARROT, DieFace.COIN,
+						DieFace.COIN, DieFace.COIN },
+				{ DieFace.SKULL, DieFace.SKULL, DieFace.SKULL, DieFace.SKULL, DieFace.PARROT, DieFace.COIN,
+						DieFace.COIN, DieFace.COIN },
+				{ DieFace.SKULL, DieFace.SKULL, DieFace.SKULL, DieFace.SKULL, DieFace.PARROT, DieFace.COIN,
+						DieFace.COIN, DieFace.COIN } };
+
+		FortuneCard fortuneCard = new FortuneCard(FortuneCardType.SKULLS, 1);
+		Turn turn = new Turn(fortuneCard, rollSequence);
+
+		assertTrue(turn.getIsIslandOfSkulls());
+		assertFalse(turn.isDisqualified());
+
+		turn.rollDice();
+
+		assertTrue(turn.getIsIslandOfSkulls());
+		assertFalse(turn.isDisqualified());
+
+		turn.rollDice();
+
+		assertTrue(turn.getIsIslandOfSkulls());
+		assertTrue(turn.isDisqualified());
+
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
+		assertEquals(Integer.valueOf(500), evaluator.evaluate());
+	}
 }
