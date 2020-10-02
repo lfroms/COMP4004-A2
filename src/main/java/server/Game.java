@@ -2,6 +2,7 @@ package server;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import model.FortuneCardInvalidException;
 import model.FortuneCardType;
@@ -34,17 +35,24 @@ final class Game {
 	private void turnForPlayer(Player player) {
 		Turn turn = new Turn();
 
+		player.printMessage("");
 		player.printMessage("It is now your turn. Your fortune card is: " + turn.getFortuneCard().getType());
+
+		if (turn.getFortuneCard().getType() == FortuneCardType.SKULLS) {
+			player.printMessage("Since you have the Skulls fortune card, you have "
+					+ turn.getFortuneCard().getNumericalValue() + " skulls by default.");
+		}
 
 		Boolean shouldLoop = true;
 
-		while (shouldLoop) {
+		while (!turn.isDisqualified() && shouldLoop) {
+			player.printMessage("");
 			printDice(turn, player);
 
-			if (turn.isDisqualified()) {
-				shouldLoop = false;
-				endTurn(turn, player);
-				continue;
+			if (turn.getIsIslandOfSkulls()) {
+				player.printMessage("Since you have more than 3 skulls, you are on the island of skulls.");
+				player.printMessage("Try to collect as many skulls as possible.");
+				player.printMessage("");
 			}
 
 			printMenu(turn, player);
@@ -69,7 +77,6 @@ final class Game {
 					continue;
 				case 5:
 					shouldLoop = false;
-					endTurn(turn, player);
 					break;
 				case 6:
 					addOrRemoveFromTreasureChest(true, turn, player);
@@ -89,6 +96,9 @@ final class Game {
 				player.printMessage("You can't perform this action because you do not have the correct fortune card.");
 			}
 		}
+
+		printDice(turn, player);
+		endTurn(turn, player);
 	}
 
 	private void printMenu(Turn turn, Player player) {
@@ -98,9 +108,15 @@ final class Game {
 			player.printMessage("0) Reroll a skull.");
 		}
 
-		player.printMessage("1) Select dice to hold.");
-		player.printMessage("2) Select dice to unhold.");
-		player.printMessage("3) Reroll unheld dice.");
+		if (turn.getIsIslandOfSkulls()) {
+			player.printMessage("3) Reroll all non-skull dice.");
+
+		} else {
+			player.printMessage("1) Select dice to hold.");
+			player.printMessage("2) Select dice to unhold.");
+			player.printMessage("3) Reroll unheld dice.");
+		}
+
 		player.printMessage("4) Reprint dice and menu.");
 		player.printMessage("5) Complete turn.");
 
@@ -116,8 +132,21 @@ final class Game {
 	}
 
 	private void endTurn(Turn turn, Player player) {
-		if (turn.isDisqualified() && !(turn.getFortuneCard().getType() == FortuneCardType.TREASURE_CHEST)) {
+		if (turn.isDisqualified() && !(turn.getFortuneCard().getType() == FortuneCardType.TREASURE_CHEST)
+				&& !turn.getIsIslandOfSkulls()) {
 			player.printMessage("That's the end of your turn! You got no points because you rolled 3 skulls.");
+			return;
+		}
+
+		if (turn.getIsIslandOfSkulls()) {
+			Integer points = new ScoreEvaluator(turn).evaluate();
+
+			player.printMessage("That's the end of your turn! Each player has lost " + points + " points.");
+
+			allPlayersExcept(player).forEach(otherPlayer -> {
+				scoreCard.addNewScore(new Score(otherPlayer.getId(), points * -1));
+			});
+
 			return;
 		}
 
@@ -170,6 +199,11 @@ final class Game {
 
 			players.get(i).printMessage("It is now player #" + currentPlayer.getId() + "'s turn.");
 		}
+	}
+
+	private List<Player> allPlayersExcept(Player player) {
+		return players.stream().filter(otherPlayer -> otherPlayer.getId() != player.getId())
+				.collect(Collectors.toList());
 	}
 
 	private void endGame() {

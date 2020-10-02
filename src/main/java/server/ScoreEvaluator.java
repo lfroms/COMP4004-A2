@@ -28,6 +28,13 @@ final class ScoreEvaluator {
 	}
 
 	public Integer evaluate() {
+		if (turn.getIsIslandOfSkulls()) {
+			Integer numberOfSkulls = countDice(turn.getDice().getAll(), DieFace.SKULL)
+					+ (turn.getFortuneCard().getNumericalValue());
+
+			return numberOfSkulls * 100;
+		}
+
 		countDiceTypes();
 
 		if (turn.getFortuneCard().getType() == FortuneCardType.MONKEY_BUSINESS) {

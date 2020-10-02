@@ -11,13 +11,18 @@ public final class Turn {
 
 	private Boolean sorceressFortuneCardExpired = false;
 	private Integer rollCount = 0;
+	private Boolean isIslandOfSkulls = false;
+	private Integer previousNumberOfSkulls = 0;
 
 	public Turn() {
 		fortuneCard = new FortuneCard();
+		this.isIslandOfSkulls = numberOfSkulls() >= 4;
 	}
 
 	public Turn(FortuneCard fortuneCard) {
 		this.fortuneCard = fortuneCard;
+		this.isIslandOfSkulls = numberOfSkulls() >= 4;
+
 	}
 
 	public Turn(FortuneCard fortuneCard, DieFace[][] rollSequence) {
@@ -25,6 +30,8 @@ public final class Turn {
 		this.rollSequence = rollSequence;
 
 		rigDice();
+
+		this.isIslandOfSkulls = numberOfSkulls() >= 4;
 	}
 
 	public Dice getDice() {
@@ -33,6 +40,10 @@ public final class Turn {
 
 	public FortuneCard getFortuneCard() {
 		return fortuneCard;
+	}
+
+	public Boolean getIsIslandOfSkulls() {
+		return isIslandOfSkulls;
 	}
 
 	public void rollDice() throws TurnCompleteException, InsufficientDiceException {
@@ -45,6 +56,7 @@ public final class Turn {
 		}
 
 		rollCount++;
+		previousNumberOfSkulls = numberOfSkulls();
 
 		if (shouldRigDice()) {
 			rigDice();
@@ -55,10 +67,11 @@ public final class Turn {
 	}
 
 	public Boolean isDisqualified() {
-		Integer numberOfSkulls = dice.getAll().stream().filter(die -> die.getFace() == DieFace.SKULL)
-				.collect(Collectors.toList()).size();
+		if (isIslandOfSkulls) {
+			return numberOfSkulls() <= previousNumberOfSkulls;
+		}
 
-		return numberOfSkulls > 2;
+		return numberOfSkulls() > 2;
 	}
 
 	public Boolean canRerollASkull() {
@@ -98,5 +111,17 @@ public final class Turn {
 		return input.stream()
 				.filter(die -> die.getIsHeld() || die.getInTreasureChest() || die.getFace() == DieFace.SKULL)
 				.collect(Collectors.toList()).size();
+	}
+
+	private Integer numberOfSkulls() {
+		Integer numberOfSkulls = dice.getAll().stream().filter(die -> die.getFace() == DieFace.SKULL)
+				.collect(Collectors.toList()).size();
+
+		if (fortuneCard.getType() == FortuneCardType.SKULLS) {
+			numberOfSkulls += fortuneCard.getNumericalValue();
+		}
+
+		return numberOfSkulls;
+
 	}
 }
