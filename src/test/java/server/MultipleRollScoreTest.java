@@ -538,4 +538,209 @@ public class MultipleRollScoreTest {
 		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
 		assertEquals(Integer.valueOf(500), evaluator.evaluate());
 	}
+
+	@Test
+	public void testFailOnFirstRollWithSeaBattleFortuneCardTwoSwords() throws Exception {
+		DieFace[][] rollSequence = new DieFace[][] { { DieFace.SKULL, DieFace.SKULL, DieFace.SKULL, DieFace.PARROT,
+				DieFace.PARROT, DieFace.MONKEY, DieFace.SKULL, DieFace.MONKEY } };
+
+		FortuneCard fortuneCard = new FortuneCard(FortuneCardType.SEA_BATTLE, 2);
+		Turn turn = new Turn(fortuneCard, rollSequence);
+
+		assertTrue(turn.isDisqualified());
+
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
+		assertEquals(Integer.valueOf(-300), evaluator.seaBattleBonusPoints());
+		assertEquals(Integer.valueOf(0), evaluator.evaluate());
+	}
+
+	@Test
+	public void testFailOnFirstRollWithSeaBattleFortuneCardThreeSwords() throws Exception {
+		DieFace[][] rollSequence = new DieFace[][] { { DieFace.SKULL, DieFace.SKULL, DieFace.SKULL, DieFace.PARROT,
+				DieFace.PARROT, DieFace.MONKEY, DieFace.SKULL, DieFace.MONKEY } };
+
+		FortuneCard fortuneCard = new FortuneCard(FortuneCardType.SEA_BATTLE, 3);
+		Turn turn = new Turn(fortuneCard, rollSequence);
+
+		assertTrue(turn.isDisqualified());
+
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
+		assertEquals(Integer.valueOf(-500), evaluator.seaBattleBonusPoints());
+		assertEquals(Integer.valueOf(0), evaluator.evaluate());
+	}
+
+	@Test
+	public void testFailOnFirstRollWithSeaBattleFortuneCardFourSwords() throws Exception {
+		DieFace[][] rollSequence = new DieFace[][] { { DieFace.SKULL, DieFace.SKULL, DieFace.SKULL, DieFace.PARROT,
+				DieFace.PARROT, DieFace.MONKEY, DieFace.SKULL, DieFace.MONKEY } };
+
+		FortuneCard fortuneCard = new FortuneCard(FortuneCardType.SEA_BATTLE, 4);
+		Turn turn = new Turn(fortuneCard, rollSequence);
+
+		assertTrue(turn.isDisqualified());
+
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
+		assertEquals(Integer.valueOf(-1000), evaluator.seaBattleBonusPoints());
+		assertEquals(Integer.valueOf(0), evaluator.evaluate());
+	}
+
+	@Test
+	public void testSeaBattleCaseA() throws Exception {
+		DieFace[][] rollSequence = new DieFace[][] { { DieFace.MONKEY, DieFace.MONKEY, DieFace.MONKEY, DieFace.SWORD,
+				DieFace.SWORD, DieFace.COIN, DieFace.PARROT, DieFace.PARROT } };
+
+		FortuneCard fortuneCard = new FortuneCard(FortuneCardType.SEA_BATTLE, 2);
+		Turn turn = new Turn(fortuneCard, rollSequence);
+
+		assertFalse(turn.isDisqualified());
+
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
+		assertEquals(Integer.valueOf(300), evaluator.seaBattleBonusPoints());
+		assertEquals(Integer.valueOf(500), Integer.valueOf(evaluator.evaluate() + evaluator.seaBattleBonusPoints()));
+	}
+
+	@Test
+	public void testSeaBattleCaseB() throws Exception {
+		DieFace[][] rollSequence = new DieFace[][] {
+				{ DieFace.MONKEY, DieFace.MONKEY, DieFace.MONKEY, DieFace.MONKEY, DieFace.SWORD, DieFace.SKULL,
+						DieFace.PARROT, DieFace.PARROT },
+				{ DieFace.MONKEY, DieFace.MONKEY, DieFace.MONKEY, DieFace.MONKEY, DieFace.SWORD, DieFace.SKULL,
+						DieFace.SWORD, DieFace.SKULL } };
+
+		FortuneCard fortuneCard = new FortuneCard(FortuneCardType.SEA_BATTLE, 2);
+		Turn turn = new Turn(fortuneCard, rollSequence);
+
+		assertFalse(turn.isDisqualified());
+
+		turn.getDice().getAll().get(0).setHeld(true);
+		turn.getDice().getAll().get(1).setHeld(true);
+		turn.getDice().getAll().get(2).setHeld(true);
+		turn.getDice().getAll().get(3).setHeld(true);
+		turn.getDice().getAll().get(4).setHeld(true);
+
+		turn.rollDice();
+
+		assertFalse(turn.isDisqualified());
+
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
+		assertEquals(Integer.valueOf(300), evaluator.seaBattleBonusPoints());
+		assertEquals(Integer.valueOf(500), Integer.valueOf(evaluator.evaluate() + evaluator.seaBattleBonusPoints()));
+	}
+
+	@Test
+	public void testSeaBattleCaseC() throws Exception {
+		DieFace[][] rollSequence = new DieFace[][] { { DieFace.MONKEY, DieFace.MONKEY, DieFace.MONKEY, DieFace.SWORD,
+				DieFace.SWORD, DieFace.SWORD, DieFace.SWORD, DieFace.SKULL } };
+
+		FortuneCard fortuneCard = new FortuneCard(FortuneCardType.SEA_BATTLE, 3);
+		Turn turn = new Turn(fortuneCard, rollSequence);
+
+		assertFalse(turn.isDisqualified());
+
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
+		assertEquals(Integer.valueOf(500), evaluator.seaBattleBonusPoints());
+		assertEquals(Integer.valueOf(800), Integer.valueOf(evaluator.evaluate() + evaluator.seaBattleBonusPoints()));
+	}
+
+	@Test
+	public void testSeaBattleCaseD() throws Exception {
+		DieFace[][] rollSequence = new DieFace[][] {
+				{ DieFace.MONKEY, DieFace.MONKEY, DieFace.MONKEY, DieFace.MONKEY, DieFace.SWORD, DieFace.SWORD,
+						DieFace.SKULL, DieFace.SKULL },
+				{ DieFace.SKULL, DieFace.SKULL, DieFace.SWORD, DieFace.SWORD, DieFace.SWORD, DieFace.SWORD,
+						DieFace.SKULL, DieFace.SKULL } };
+
+		FortuneCard fortuneCard = new FortuneCard(FortuneCardType.SEA_BATTLE, 3);
+		Turn turn = new Turn(fortuneCard, rollSequence);
+
+		assertFalse(turn.isDisqualified());
+
+		turn.getDice().getAll().get(4).setHeld(true);
+		turn.getDice().getAll().get(5).setHeld(true);
+
+		turn.rollDice();
+
+		assertTrue(turn.isDisqualified());
+	}
+
+	@Test
+	public void testSeaBattleCaseE() throws Exception {
+		DieFace[][] rollSequence = new DieFace[][] { { DieFace.MONKEY, DieFace.MONKEY, DieFace.MONKEY, DieFace.SWORD,
+				DieFace.SWORD, DieFace.SWORD, DieFace.SWORD, DieFace.SKULL } };
+
+		FortuneCard fortuneCard = new FortuneCard(FortuneCardType.SEA_BATTLE, 4);
+		Turn turn = new Turn(fortuneCard, rollSequence);
+
+		assertFalse(turn.isDisqualified());
+
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
+		assertEquals(Integer.valueOf(1000), evaluator.seaBattleBonusPoints());
+		assertEquals(Integer.valueOf(1300), Integer.valueOf(evaluator.evaluate() + evaluator.seaBattleBonusPoints()));
+	}
+
+	@Test
+	public void testSeaBattleCaseF() throws Exception {
+		DieFace[][] rollSequence = new DieFace[][] {
+				{ DieFace.MONKEY, DieFace.MONKEY, DieFace.MONKEY, DieFace.SWORD, DieFace.SKULL, DieFace.DIAMOND,
+						DieFace.PARROT, DieFace.PARROT },
+				{ DieFace.MONKEY, DieFace.MONKEY, DieFace.MONKEY, DieFace.SWORD, DieFace.SKULL, DieFace.DIAMOND,
+						DieFace.SWORD, DieFace.SWORD },
+				{ DieFace.SWORD, DieFace.PARROT, DieFace.PARROT, DieFace.SWORD, DieFace.SKULL, DieFace.DIAMOND,
+						DieFace.SWORD, DieFace.SWORD } };
+
+		FortuneCard fortuneCard = new FortuneCard(FortuneCardType.SEA_BATTLE, 4);
+		Turn turn = new Turn(fortuneCard, rollSequence);
+
+		assertFalse(turn.isDisqualified());
+
+		turn.getDice().getAll().get(0).setHeld(true);
+		turn.getDice().getAll().get(1).setHeld(true);
+		turn.getDice().getAll().get(2).setHeld(true);
+		turn.getDice().getAll().get(3).setHeld(true);
+		turn.getDice().getAll().get(5).setHeld(true);
+
+		turn.rollDice();
+		assertFalse(turn.isDisqualified());
+
+		turn.getDice().getAll().get(0).setHeld(false);
+		turn.getDice().getAll().get(1).setHeld(false);
+		turn.getDice().getAll().get(2).setHeld(false);
+		turn.getDice().getAll().get(6).setHeld(true);
+		turn.getDice().getAll().get(7).setHeld(true);
+
+		turn.rollDice();
+		assertFalse(turn.isDisqualified());
+
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
+		assertEquals(Integer.valueOf(1000), evaluator.seaBattleBonusPoints());
+		assertEquals(Integer.valueOf(1300), Integer.valueOf(evaluator.evaluate() + evaluator.seaBattleBonusPoints()));
+	}
+
+	@Test
+	public void testFullChestSeaBattle() throws Exception {
+		DieFace[][] rollSequence = new DieFace[][] {
+				{ DieFace.MONKEY, DieFace.MONKEY, DieFace.MONKEY, DieFace.MONKEY, DieFace.SWORD, DieFace.PARROT,
+						DieFace.PARROT, DieFace.COIN },
+				{ DieFace.MONKEY, DieFace.MONKEY, DieFace.MONKEY, DieFace.MONKEY, DieFace.SWORD, DieFace.COIN,
+						DieFace.SWORD, DieFace.COIN } };
+
+		FortuneCard fortuneCard = new FortuneCard(FortuneCardType.SEA_BATTLE, 2);
+		Turn turn = new Turn(fortuneCard, rollSequence);
+
+		assertFalse(turn.isDisqualified());
+
+		turn.getDice().getAll().get(0).setHeld(true);
+		turn.getDice().getAll().get(1).setHeld(true);
+		turn.getDice().getAll().get(2).setHeld(true);
+		turn.getDice().getAll().get(3).setHeld(true);
+		turn.getDice().getAll().get(4).setHeld(true);
+		turn.getDice().getAll().get(7).setHeld(true);
+
+		turn.rollDice();
+		assertFalse(turn.isDisqualified());
+
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
+		assertEquals(Integer.valueOf(300), evaluator.seaBattleBonusPoints());
+		assertEquals(Integer.valueOf(1200), Integer.valueOf(evaluator.evaluate() + evaluator.seaBattleBonusPoints()));
+	}
 }
