@@ -243,6 +243,7 @@ final class Game {
 	}
 
 	private void endGame() {
+		broadcastMessage("The game is over. Player #" + scoreCard.getWinnerId().get() + " has won the game!");
 		players.forEach(player -> player.endGame());
 	}
 
