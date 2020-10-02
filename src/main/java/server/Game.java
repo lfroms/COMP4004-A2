@@ -42,6 +42,10 @@ final class Game {
 		endGame();
 	}
 
+	public ScoreCard getScoreCard() {
+		return scoreCard;
+	}
+
 	private void turnForPlayer(Player player) {
 		Turn turn = testMode == null ? new Turn() : new TestTurnFactory(testMode, turnSequence).createTurn();
 

@@ -17,6 +17,7 @@ final class Server extends Thread {
 	private ServerSocket serverSocket = null;
 	private final List<Player> players = new ArrayList<Player>();
 
+	private Game game;
 	private final GameTestMode testMode;
 
 	public static void main(String[] args) throws IOException {
@@ -30,7 +31,7 @@ final class Server extends Thread {
 			testModeToRun = GameTestMode.SEQUENCE_B;
 		}
 
-		new Server(testModeToRun).start();
+		new Server(PORT, testModeToRun).start();
 	}
 
 	public Server(Integer numberOfPlayers) throws IOException {
@@ -42,12 +43,16 @@ final class Server extends Thread {
 
 	}
 
-	public Server(GameTestMode testMode) throws IOException {
-		serverSocket = new ServerSocket(PORT);
+	public Server(Integer port, GameTestMode testMode) throws IOException {
+		serverSocket = new ServerSocket(port);
 		localhost = InetAddress.getLocalHost();
 
 		this.numberOfPlayers = 3;
 		this.testMode = testMode;
+	}
+
+	public Game getGame() {
+		return game;
 	}
 
 	@Override
@@ -73,7 +78,7 @@ final class Server extends Thread {
 			}
 		}
 
-		Game game = new Game(players, testMode);
+		game = new Game(players, testMode);
 		game.loop();
 	}
 

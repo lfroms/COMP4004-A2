@@ -11,11 +11,11 @@ public final class Client extends Thread {
 	private Integer playerId = null;
 
 	public static void main(String args[]) throws IOException {
-		new Client().start();
+		new Client(PORT).start();
 	}
 
-	public Client() throws IOException {
-		connection = new Connection(PORT);
+	public Client(Integer port) throws IOException {
+		connection = new Connection(port);
 	}
 
 	@Override
