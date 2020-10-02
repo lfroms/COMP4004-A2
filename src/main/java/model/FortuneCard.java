@@ -33,11 +33,11 @@ public final class FortuneCard {
 
 	private Integer getRandomNumericalValue() {
 		if (type == FortuneCardType.SKULLS) {
-			return random.nextInt() * 2 + 1;
+			return 1 + (int) (Math.random() * ((2 - 1) + 1));
 		}
 
 		if (type == FortuneCardType.SEA_BATTLE) {
-			return random.nextInt() * 4 + 1;
+			return 2 + (int) (Math.random() * ((4 - 2) + 1));
 		}
 
 		return 0;
