@@ -18,6 +18,22 @@ public class ScoreCardTest {
 	}
 
 	@Test
+	public void testScoreCannotFallBelowZero() {
+		ScoreCard scoreCard = new ScoreCard();
+		Score firstScore = new Score(1, 100);
+		Score secondScore = new Score(1, 100);
+		Score thirdScore = new Score(1, 100);
+		Score fourthScore = new Score(1, -500);
+
+		scoreCard.addNewScore(firstScore);
+		scoreCard.addNewScore(secondScore);
+		scoreCard.addNewScore(thirdScore);
+		scoreCard.addNewScore(fourthScore);
+
+		assertEquals(firstScore, scoreCard.getScores().get(0));
+	}
+
+	@Test
 	public void testGetScoresFiltersScoresByPlayerId() {
 		ScoreCard scoreCard = new ScoreCard();
 		Score firstScore = new Score(1, 100);

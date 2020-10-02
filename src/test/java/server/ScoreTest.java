@@ -18,4 +18,12 @@ public class ScoreTest {
 
 		assertEquals(Integer.valueOf(100), score.getScore());
 	}
+
+	@Test
+	public void testSetScoreSetsScore() {
+		Score score = new Score(1, 100);
+		score.setScore(200);
+
+		assertEquals(Integer.valueOf(200), score.getScore());
+	}
 }
