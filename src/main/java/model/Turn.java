@@ -11,18 +11,15 @@ public final class Turn {
 
 	private Boolean sorceressFortuneCardExpired = false;
 	private Integer rollCount = 0;
-	private final Boolean isIslandOfSkulls;
+	private Boolean isIslandOfSkulls = false;
 	private Integer previousNumberOfSkulls = 0;
 
 	public Turn() {
 		fortuneCard = new FortuneCard();
-		this.isIslandOfSkulls = numberOfSkulls() >= 4 && !getIsInSeaBattle();
 	}
 
 	public Turn(FortuneCard fortuneCard) {
 		this.fortuneCard = fortuneCard;
-		this.isIslandOfSkulls = numberOfSkulls() >= 4 && !getIsInSeaBattle();
-
 	}
 
 	public Turn(FortuneCard fortuneCard, DieFace[][] rollSequence) {
@@ -30,8 +27,6 @@ public final class Turn {
 		this.rollSequence = rollSequence;
 
 		rigDice();
-
-		this.isIslandOfSkulls = numberOfSkulls() >= 4 && !getIsInSeaBattle();
 	}
 
 	public Dice getDice() {
@@ -43,6 +38,10 @@ public final class Turn {
 	}
 
 	public Boolean getIsIslandOfSkulls() {
+		if (rollCount == 0) {
+			isIslandOfSkulls = numberOfSkulls() >= 4 && !getIsInSeaBattle();
+		}
+
 		return isIslandOfSkulls;
 	}
 
