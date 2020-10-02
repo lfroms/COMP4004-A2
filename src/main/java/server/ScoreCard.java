@@ -13,6 +13,13 @@ final class ScoreCard {
 	private List<Score> scores = new ArrayList<Score>();
 
 	public void addNewScore(Score score) {
+		Integer newScore = getCurrentScore(score.getPlayerId()) + score.getScore();
+
+		if (newScore < 0) {
+			scores.add(new Score(score.getPlayerId(), score.getScore() - newScore));
+			return;
+		}
+
 		scores.add(score);
 	}
 
