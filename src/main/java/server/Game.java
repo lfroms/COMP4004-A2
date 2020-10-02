@@ -55,6 +55,13 @@ final class Game {
 				player.printMessage("");
 			}
 
+			if (turn.getIsInSeaBattle()) {
+				player.printMessage("You are engaged in a sea battle! You must get "
+						+ turn.getFortuneCard().getNumericalValue() + " swords.");
+				player.printMessage(
+						"If you fail, the bonus points you could have won will be deducted from your total.");
+			}
+
 			printMenu(turn, player);
 
 			try {
@@ -131,17 +138,47 @@ final class Game {
 		player.printMessage(Printer.toString(turn.getDice()));
 	}
 
-	private void endTurn(Turn turn, Player player) {
-		if (turn.isDisqualified() && !(turn.getFortuneCard().getType() == FortuneCardType.TREASURE_CHEST)
-				&& !turn.getIsIslandOfSkulls()) {
-			player.printMessage("That's the end of your turn! You got no points because you rolled 3 skulls.");
+	private void handleEndOfSeaBattle(Turn turn, Player player, ScoreEvaluator evaluator) {
+		if (!turn.getIsInSeaBattle()) {
 			return;
 		}
 
-		if (turn.getIsIslandOfSkulls()) {
-			Integer points = new ScoreEvaluator(turn).evaluate();
+		if (turn.wonSeaBattle()) {
+			player.printMessage("You have won the sea battle! You will gain an additional "
+					+ evaluator.seaBattleBonusPoints() + " points.");
+		} else {
+			player.printMessage("You have lost the sea battle. You will lose " + (-1 * evaluator.seaBattleBonusPoints())
+					+ " points.");
+		}
 
+		scoreCard.addNewScore(new Score(player.getId(), evaluator.seaBattleBonusPoints()));
+	}
+
+	private void summarizeEndOfTurn(Turn turn, Player player) {
+		player.printMessage("Your total number of points is " + scoreCard.getCurrentScore(player.getId()) + ".");
+	}
+
+	private void endTurn(Turn turn, Player player) {
+		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
+
+		if (turn.isDisqualified() && !(turn.getFortuneCard().getType() == FortuneCardType.TREASURE_CHEST)
+				&& !turn.getIsIslandOfSkulls()) {
+
+			handleEndOfSeaBattle(turn, player, evaluator);
+
+			if (!turn.getIsInSeaBattle()) {
+				player.printMessage("That's the end of your turn! You got no points because you rolled 3 skulls.");
+			}
+
+			summarizeEndOfTurn(turn, player);
+			return;
+		}
+
+		Integer points = evaluator.evaluate();
+
+		if (turn.getIsIslandOfSkulls()) {
 			player.printMessage("That's the end of your turn! Each player has lost " + points + " points.");
+			summarizeEndOfTurn(turn, player);
 
 			allPlayersExcept(player).forEach(otherPlayer -> {
 				scoreCard.addNewScore(new Score(otherPlayer.getId(), points * -1));
@@ -150,12 +187,11 @@ final class Game {
 			return;
 		}
 
-		Integer points = new ScoreEvaluator(turn).evaluate();
-
+		handleEndOfSeaBattle(turn, player, evaluator);
 		scoreCard.addNewScore(new Score(player.getId(), points));
 
 		player.printMessage("That's the end of your turn! You got " + points + " points.");
-		player.printMessage("Your total number of points is " + scoreCard.getCurrentScore(player.getId()) + ".");
+		summarizeEndOfTurn(turn, player);
 	}
 
 	private void holdOrUnholdDice(Boolean holdUnhold, Turn turn, Player player) {
