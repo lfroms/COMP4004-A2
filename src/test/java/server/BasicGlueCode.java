@@ -1,6 +1,8 @@
 package server;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +13,8 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import model.Die;
 import model.DieFace;
+import model.FortuneCard;
+import model.FortuneCardType;
 import model.InsufficientDiceException;
 import model.Turn;
 import model.TurnCompleteException;
@@ -67,6 +71,27 @@ public class BasicGlueCode {
 		holdDiceOfType(dice, DieFace.MONKEY, int3);
 		holdDiceOfType(dice, DieFace.COIN, int4);
 		holdDiceOfType(dice, DieFace.DIAMOND, int5);
+	}
+
+	@Given("player has {string} fortune card")
+	public void player_has_fortune_card(String string) {
+		FortuneCard fortuneCard = new FortuneCard(FortuneCardType.valueOf(string));
+		game.getCurrentTurn().setFortuneCard(fortuneCard);
+	}
+
+	@Then("player receives {int} points")
+	public void player_receives_points(Integer int1) {
+		ScoreEvaluator evaluator = new ScoreEvaluator(game.getCurrentTurn());
+		assertEquals(int1, evaluator.evaluate());
+	}
+
+	@Then("player cannot reroll unheld dice")
+	public void player_cannot_reroll_unheld_dice() throws TurnCompleteException {
+		try {
+			game.getCurrentTurn().rollDice();
+			fail("InsufficientDiceException was not thrown when there were insufficient dice to reroll");
+		} catch (InsufficientDiceException e) {
+		}
 	}
 
 	private void addNumberOfFaces(List<DieFace> input, DieFace face, Integer count) {

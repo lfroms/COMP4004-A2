@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public final class Turn {
-	private final FortuneCard fortuneCard;
+	private FortuneCard fortuneCard;
 	private final Dice dice = new Dice();
 	private DieFace[][] rollSequence = null;
 
@@ -43,6 +43,10 @@ public final class Turn {
 
 	public FortuneCard getFortuneCard() {
 		return fortuneCard;
+	}
+
+	public void setFortuneCard(FortuneCard fortuneCard) {
+		this.fortuneCard = fortuneCard;
 	}
 
 	public Boolean getIsIslandOfSkulls() {
