@@ -1,6 +1,7 @@
 package server;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -14,6 +15,7 @@ import io.cucumber.java.en.When;
 import model.Die;
 import model.DieFace;
 import model.FortuneCard;
+import model.FortuneCardInvalidException;
 import model.FortuneCardType;
 import model.InsufficientDiceException;
 import model.Turn;
@@ -36,7 +38,6 @@ public class BasicGlueCode {
 
 	@Then("the turn ends")
 	public void the_turn_ends() {
-		System.out.println(Printer.toString(game.getCurrentTurn().getDice()));
 		assertTrue(game.getCurrentTurn().isDisqualified());
 	}
 
@@ -92,6 +93,16 @@ public class BasicGlueCode {
 			fail("InsufficientDiceException was not thrown when there were insufficient dice to reroll");
 		} catch (InsufficientDiceException e) {
 		}
+	}
+
+	@When("player rerolls {int} skull")
+	public void player_rerolls_skull(Integer int1) throws FortuneCardInvalidException {
+		game.getCurrentTurn().rerollSingleSkull();
+	}
+
+	@Then("turn can continue")
+	public void turn_can_continue() {
+		assertFalse(game.getCurrentTurn().isDisqualified());
 	}
 
 	private void addNumberOfFaces(List<DieFace> input, DieFace face, Integer count) {
