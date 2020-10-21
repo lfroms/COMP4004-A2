@@ -118,7 +118,12 @@ public final class Turn {
 			return;
 		}
 
-		firstSkull.get().roll();
+		if (shouldRigDice()) {
+			rigSingleDie(firstSkull.get());
+		} else {
+			firstSkull.get().roll();
+		}
+
 		sorceressFortuneCardExpired = true;
 	}
 
@@ -131,6 +136,10 @@ public final class Turn {
 			DieFace newFace = rollSequence[rollCount][i];
 			die.setFace(newFace);
 		}
+	}
+
+	private void rigSingleDie(Die die) {
+		die.setFace(rollSequence[rollCount][0]);
 	}
 
 	private Boolean shouldRigDice() {
