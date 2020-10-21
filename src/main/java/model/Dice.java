@@ -17,6 +17,12 @@ public final class Dice {
 		return dice;
 	}
 
+	public List<Die> getRollable() {
+		return dice.stream()
+				.filter(die -> !die.getIsHeld() && (die.getFace() != DieFace.SKULL) && !die.getInTreasureChest())
+				.collect(Collectors.toList());
+	}
+
 	public List<Die> getScorable() {
 		return dice.stream().filter(die -> die.getFace() != DieFace.SKULL).collect(Collectors.toList());
 	}

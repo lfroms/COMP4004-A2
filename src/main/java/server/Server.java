@@ -23,12 +23,14 @@ final class Server extends Thread {
 	public static void main(String[] args) throws IOException {
 		GameTestMode testModeToRun = null;
 
-		switch (args[0]) {
-		case "seq_a":
-			testModeToRun = GameTestMode.SEQUENCE_A;
-			break;
-		case "seq_b":
-			testModeToRun = GameTestMode.SEQUENCE_B;
+		if (args.length > 0) {
+			switch (args[0]) {
+			case "seq_a":
+				testModeToRun = GameTestMode.SEQUENCE_A;
+				break;
+			case "seq_b":
+				testModeToRun = GameTestMode.SEQUENCE_B;
+			}
 		}
 
 		new Server(PORT, testModeToRun).start();
@@ -47,7 +49,9 @@ final class Server extends Thread {
 		serverSocket = new ServerSocket(port);
 		localhost = InetAddress.getLocalHost();
 
-		this.numberOfPlayers = 3;
+		if (testMode != null) {
+			this.numberOfPlayers = 3;
+		}
 		this.testMode = testMode;
 	}
 
@@ -78,7 +82,13 @@ final class Server extends Thread {
 			}
 		}
 
-		game = new Game(players, testMode);
+		if (testMode != null) {
+			TurnFactory factory = new TurnFactory(testMode);
+			game = new Game(players, factory);
+		} else {
+			game = new Game(players);
+		}
+
 		game.loop();
 	}
 

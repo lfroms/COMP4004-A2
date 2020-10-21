@@ -1,5 +1,6 @@
 package model;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,8 +26,15 @@ public final class Turn {
 	public Turn(FortuneCard fortuneCard, DieFace[][] rollSequence) {
 		this.fortuneCard = fortuneCard;
 		this.rollSequence = rollSequence;
+	}
 
-		rigDice();
+	public void addRiggedRoll(DieFace[] faces) {
+		if (this.rollSequence == null) {
+			this.rollSequence = new DieFace[0][8];
+		}
+
+		this.rollSequence = Arrays.copyOf(this.rollSequence, this.rollSequence.length + 1);
+		this.rollSequence[this.rollSequence.length - 1] = faces;
 	}
 
 	public Dice getDice() {
@@ -38,7 +46,7 @@ public final class Turn {
 	}
 
 	public Boolean getIsIslandOfSkulls() {
-		if (rollCount == 0) {
+		if (rollCount == 1) {
 			isIslandOfSkulls = numberOfSkulls() >= 4 && !getIsInSeaBattle();
 		}
 
@@ -57,17 +65,22 @@ public final class Turn {
 		return numberOfSwords() >= fortuneCard.getNumericalValue();
 	}
 
+	private Boolean getHasStartedTurn() {
+		return rollCount > 0;
+	}
+
 	public void rollDice() throws TurnCompleteException, InsufficientDiceException {
-		if (isDisqualified()) {
-			throw new TurnCompleteException();
-		}
+		if (getHasStartedTurn()) {
+			if (isDisqualified()) {
+				throw new TurnCompleteException();
+			}
 
-		if (countUnrollableDice(dice.getAll()) > 6) {
-			throw new InsufficientDiceException();
-		}
+			if (countUnrollableDice(dice.getAll()) > 6) {
+				throw new InsufficientDiceException();
+			}
 
-		rollCount++;
-		previousNumberOfSkulls = numberOfSkulls();
+			previousNumberOfSkulls = numberOfSkulls();
+		}
 
 		if (shouldRigDice()) {
 			rigDice();
@@ -75,10 +88,11 @@ public final class Turn {
 			dice.rollUnheld();
 		}
 
+		rollCount++;
 	}
 
 	public Boolean isDisqualified() {
-		if (isIslandOfSkulls) {
+		if (getIsIslandOfSkulls()) {
 			return numberOfSkulls() <= previousNumberOfSkulls;
 		}
 
@@ -105,12 +119,13 @@ public final class Turn {
 	}
 
 	private void rigDice() {
-		for (int i = 0; i < dice.getAll().size(); i++) {
-			Die die = dice.getAll().get(i);
+		// Can rig all dice on first roll
+		List<Die> diceToRig = rollCount == 0 ? dice.getAll() : dice.getRollable();
 
-			if ((die.getIsHeld() == false && die.getFace() != DieFace.SKULL) || rollCount == 0) {
-				die.setFace(rollSequence[rollCount][i]);
-			}
+		for (int i = 0; i < diceToRig.size(); i++) {
+			Die die = diceToRig.get(i);
+			DieFace newFace = rollSequence[rollCount][i];
+			die.setFace(newFace);
 		}
 	}
 

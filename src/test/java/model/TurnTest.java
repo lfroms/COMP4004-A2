@@ -8,29 +8,26 @@ import org.junit.Test;
 
 public class TurnTest {
 	@Test
-	public void testIsDisqualifiedIsFalseIfLessThanThreeSkulls() {
-		Turn turn = new Turn();
+	public void testIsDisqualifiedIsFalseIfLessThanThreeSkulls()
+			throws TurnCompleteException, InsufficientDiceException {
+		Turn turn = new Turn(new FortuneCard(FortuneCardType.GOLD));
 
-		List<Die> dice = turn.getDice().getAll();
-		dice.forEach(die -> {
-			die.setFace(DieFace.COIN);
-		});
+		turn.addRiggedRoll(new DieFace[] { DieFace.COIN, DieFace.COIN, DieFace.COIN, DieFace.COIN, DieFace.COIN,
+				DieFace.COIN, DieFace.COIN, DieFace.SKULL });
 
-		dice.get(0).setFace(DieFace.SKULL);
+		turn.rollDice();
 
 		assertFalse(turn.isDisqualified());
 	}
 
 	@Test
-	public void testIsDisqualifiedIsTrueIfAtLeastThreeSkulls() {
-		Turn turn = new Turn();
+	public void testIsDisqualifiedIsTrueIfAtThreeSkulls() throws TurnCompleteException, InsufficientDiceException {
+		Turn turn = new Turn(new FortuneCard(FortuneCardType.GOLD));
 
-		List<Die> dice = turn.getDice().getAll();
-		dice.forEach(die -> {
-			die.setFace(DieFace.SKULL);
-		});
+		turn.addRiggedRoll(new DieFace[] { DieFace.DIAMOND, DieFace.DIAMOND, DieFace.DIAMOND, DieFace.DIAMOND,
+				DieFace.DIAMOND, DieFace.SKULL, DieFace.SKULL, DieFace.SKULL });
 
-		dice.get(0).setFace(DieFace.DIAMOND);
+		turn.rollDice();
 
 		assertTrue(turn.isDisqualified());
 	}
@@ -39,12 +36,11 @@ public class TurnTest {
 	public void testRollDiceThrowsTurnCompleteExceptionIfCannotContinue() {
 		Turn turn = new Turn();
 
-		List<Die> dice = turn.getDice().getAll();
-		dice.forEach(die -> {
-			die.setFace(DieFace.SKULL);
-		});
+		turn.addRiggedRoll(new DieFace[] { DieFace.SKULL, DieFace.SKULL, DieFace.SKULL, DieFace.SKULL, DieFace.SKULL,
+				DieFace.SKULL, DieFace.SKULL, DieFace.SKULL });
 
 		try {
+			turn.rollDice();
 			turn.rollDice();
 
 			fail("TurnCompleteException was not thrown when the turn was complete");
@@ -57,12 +53,13 @@ public class TurnTest {
 	public void testRollDiceDoesNotThrowTurnCompleteExceptionIfCanContinue() {
 		Turn turn = new Turn();
 
-		List<Die> dice = turn.getDice().getAll();
-		dice.forEach(die -> {
-			die.setFace(DieFace.DIAMOND);
-		});
+		turn.addRiggedRoll(new DieFace[] { DieFace.DIAMOND, DieFace.DIAMOND, DieFace.DIAMOND, DieFace.DIAMOND,
+				DieFace.DIAMOND, DieFace.DIAMOND, DieFace.DIAMOND, DieFace.DIAMOND });
+		turn.addRiggedRoll(new DieFace[] { DieFace.COIN, DieFace.COIN, DieFace.COIN, DieFace.COIN, DieFace.COIN,
+				DieFace.COIN, DieFace.COIN, DieFace.COIN });
 
 		try {
+			turn.rollDice();
 			turn.rollDice();
 		} catch (TurnCompleteException exception) {
 			fail("TurnCompleteException was thrown when the turn was not complete");
@@ -71,8 +68,10 @@ public class TurnTest {
 	}
 
 	@Test
-	public void testRollDiceThrowsInsufficientDiceExceptionIfInsufficientDice() {
+	public void testRollDiceThrowsInsufficientDiceExceptionIfInsufficientDice()
+			throws TurnCompleteException, InsufficientDiceException {
 		Turn turn = new Turn();
+		turn.rollDice();
 
 		List<Die> dice = turn.getDice().getAll();
 		dice.forEach(die -> {
@@ -231,6 +230,7 @@ public class TurnTest {
 
 		FortuneCard fortuneCard = new FortuneCard(FortuneCardType.SKULLS, 2);
 		Turn turn = new Turn(fortuneCard, rollSequence);
+		turn.rollDice();
 
 		assertTrue(turn.isDisqualified());
 	}
@@ -242,6 +242,7 @@ public class TurnTest {
 
 		FortuneCard fortuneCard = new FortuneCard(FortuneCardType.SKULLS, 1);
 		Turn turn = new Turn(fortuneCard, rollSequence);
+		turn.rollDice();
 
 		assertTrue(turn.isDisqualified());
 	}

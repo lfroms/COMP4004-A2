@@ -8,13 +8,25 @@ import model.FortuneCard;
 import model.FortuneCardType;
 import model.Turn;
 
-final class TestTurnFactory {
+final class TurnFactory {
 	private final GameTestMode testMode;
-	private final Integer sequence;
+	private final List<Turn> turns;
 
-	public TestTurnFactory(GameTestMode testMode, Integer sequence) {
+	private Integer sequence = 0;
+
+	public TurnFactory(GameTestMode testMode) {
 		this.testMode = testMode;
-		this.sequence = sequence;
+		this.turns = null;
+	}
+
+	public TurnFactory(List<Turn> turns) {
+		this.testMode = null;
+		this.turns = turns;
+	}
+
+	public TurnFactory() {
+		this.testMode = null;
+		this.turns = new ArrayList<>();
 	}
 
 	private final List<Turn> sequenceATurns = new ArrayList<Turn>() {
@@ -61,13 +73,30 @@ final class TestTurnFactory {
 		}
 	};
 
-	public Turn createTurn() {
-		switch (testMode) {
-		case SEQUENCE_A:
-			return sequenceATurns.get(sequence);
-		default:
-			return sequenceBTurns.get(sequence);
-		}
+	public Turn createAndIncrementTurn() {
+		Turn turn = getCurrentTurn();
+		sequence++;
+		return turn;
 	}
 
+	public void addTurn(Turn turn) {
+		turns.add(turn);
+	}
+
+	public Turn getCurrentTurn() {
+		if (testMode != null) {
+			switch (testMode) {
+			case SEQUENCE_A:
+				return sequenceATurns.get(sequence);
+			default:
+				return sequenceBTurns.get(sequence);
+			}
+		}
+
+		if (sequence >= turns.size()) {
+			return new Turn();
+		} else {
+			return turns.get(sequence);
+		}
+	}
 }

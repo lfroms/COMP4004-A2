@@ -15,6 +15,13 @@ final class Player {
 	private final DataOutputStream out;
 	private final Integer playerId;
 
+	public Player(Integer id) {
+		inputStream = System.in;
+		in = new BufferedReader(new InputStreamReader(inputStream));
+		out = new DataOutputStream(System.out);
+		playerId = id;
+	}
+
 	public Player(Socket socket, Integer id) throws IOException {
 		inputStream = socket.getInputStream();
 		in = new BufferedReader(new InputStreamReader(inputStream));

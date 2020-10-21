@@ -13,18 +13,18 @@ import model.TurnCompleteException;
 final class Game {
 	private final List<Player> players;
 	private final ScoreCard scoreCard = new ScoreCard();
-	private final GameTestMode testMode;
+	private final TurnFactory turnFactory;
 
-	private Integer turnSequence = 0;
+	private Turn turn = null;
 
 	public Game(List<Player> players) {
 		this.players = players;
-		this.testMode = null;
+		this.turnFactory = null;
 	}
 
-	public Game(List<Player> players, GameTestMode testMode) {
+	public Game(List<Player> players, TurnFactory turnFactory) {
 		this.players = players;
-		this.testMode = testMode;
+		this.turnFactory = turnFactory;
 	}
 
 	public void loop() {
@@ -35,7 +35,6 @@ final class Game {
 			players.forEach(player -> {
 				alertOtherPlayersOfTurn(player);
 				turnForPlayer(player);
-				turnSequence++;
 			});
 		}
 
@@ -46,8 +45,22 @@ final class Game {
 		return scoreCard;
 	}
 
+	public Turn getCurrentTurn() {
+		return turn;
+	}
+
+	public void setCurrentTurn(Turn turn) {
+		this.turn = turn;
+	}
+
 	private void turnForPlayer(Player player) {
-		Turn turn = testMode == null ? new Turn() : new TestTurnFactory(testMode, turnSequence).createTurn();
+		turn = turnFactory == null ? new Turn() : turnFactory.createAndIncrementTurn();
+
+		try {
+			turn.rollDice();
+		} catch (TurnCompleteException | InsufficientDiceException e1) {
+			// No-op. These errors do not fire at the start of a turn.
+		}
 
 		player.printMessage("");
 		player.printMessage("It is now your turn. Your fortune card is: " + turn.getFortuneCard().getType());
