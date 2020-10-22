@@ -105,6 +105,30 @@ public class BasicGlueCode {
 		assertFalse(game.getCurrentTurn().isDisqualified());
 	}
 
+	@When("player places {int} parrots, {int} swords, {int} monkeys, {int} coins, {int} diamonds in treasure chest")
+	public void player_places_parrots_swords_monkeys_coins_diamonds_in_treasure_chest(Integer int1, Integer int2,
+			Integer int3, Integer int4, Integer int5) {
+		List<Die> dice = game.getCurrentTurn().getDice().getAll();
+
+		setTreasureChestDiceOfType(dice, DieFace.PARROT, int1, true);
+		setTreasureChestDiceOfType(dice, DieFace.SWORD, int2, true);
+		setTreasureChestDiceOfType(dice, DieFace.MONKEY, int3, true);
+		setTreasureChestDiceOfType(dice, DieFace.COIN, int4, true);
+		setTreasureChestDiceOfType(dice, DieFace.DIAMOND, int5, true);
+	}
+
+	@When("player removes {int} parrots, {int} swords, {int} monkeys, {int} coins, {int} diamonds from treasure chest")
+	public void player_removes_parrots_swords_monkeys_coins_diamonds_from_treasure_chest(Integer int1, Integer int2,
+			Integer int3, Integer int4, Integer int5) {
+		List<Die> dice = game.getCurrentTurn().getDice().getAll();
+
+		setTreasureChestDiceOfType(dice, DieFace.PARROT, int1, false);
+		setTreasureChestDiceOfType(dice, DieFace.SWORD, int2, false);
+		setTreasureChestDiceOfType(dice, DieFace.MONKEY, int3, false);
+		setTreasureChestDiceOfType(dice, DieFace.COIN, int4, false);
+		setTreasureChestDiceOfType(dice, DieFace.DIAMOND, int5, false);
+	}
+
 	private void addNumberOfFaces(List<DieFace> input, DieFace face, Integer count) {
 		for (int i = 0; i < count; i++) {
 			input.add(face);
@@ -123,6 +147,24 @@ public class BasicGlueCode {
 				numberHeld++;
 			} else {
 				die.setHeld(false);
+			}
+		}
+	}
+
+	private void setTreasureChestDiceOfType(List<Die> input, DieFace face, Integer count, Boolean add) {
+		Integer numberAdded = 0;
+		List<Die> diceWithFace = input.stream().filter(die -> die.getFace() == face).collect(Collectors.toList());
+
+		for (int i = 0; i < diceWithFace.size(); i++) {
+			Die die = diceWithFace.get(i);
+
+			if (die.getInTreasureChest() == add) {
+				continue;
+			}
+
+			if (numberAdded < count) {
+				die.setInTreasureChest(add);
+				numberAdded++;
 			}
 		}
 	}
