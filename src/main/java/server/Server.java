@@ -18,7 +18,8 @@ final class Server extends Thread {
 	private final List<Player> players = new ArrayList<Player>();
 
 	private Game game;
-	private final GameTestMode testMode;
+	private final GameTestMode testSequence;
+	private final Boolean testMode;
 
 	public static void main(String[] args) throws IOException {
 		GameTestMode testModeToRun = null;
@@ -41,17 +42,27 @@ final class Server extends Thread {
 
 		serverSocket = new ServerSocket(PORT);
 		localhost = InetAddress.getLocalHost();
-		testMode = null;
-
+		testSequence = null;
+		testMode = false;
 	}
 
-	public Server(Integer port, GameTestMode testMode) throws IOException {
+	public Server(Integer port, GameTestMode testSequence) throws IOException {
 		serverSocket = new ServerSocket(port);
 		localhost = InetAddress.getLocalHost();
 
-		if (testMode != null) {
+		if (testSequence != null) {
 			this.numberOfPlayers = 3;
 		}
+		this.testSequence = testSequence;
+		testMode = false;
+	}
+
+	public Server(Integer numberOfPlayers, Boolean testMode) throws IOException {
+		this.numberOfPlayers = numberOfPlayers;
+
+		serverSocket = new ServerSocket(PORT);
+		localhost = InetAddress.getLocalHost();
+		testSequence = null;
 		this.testMode = testMode;
 	}
 
@@ -82,14 +93,20 @@ final class Server extends Thread {
 			}
 		}
 
-		if (testMode != null) {
-			TurnFactory factory = new TurnFactory(testMode);
+		if (testSequence != null) {
+			TurnFactory factory = new TurnFactory(testSequence);
 			game = new Game(players, factory);
+		} else if (testMode) {
+			game = new Game(players, true);
 		} else {
 			game = new Game(players);
 		}
 
 		game.loop();
+	}
+
+	public List<Player> getPlayers() {
+		return players;
 	}
 
 	private void promptForNumberOfPlayers() {

@@ -9,6 +9,7 @@ public final class Client extends Thread {
 	private final Connection connection;
 
 	private Integer playerId = null;
+	private String nextInput = null;
 
 	public static void main(String args[]) throws IOException {
 		new Client(PORT).start();
@@ -16,6 +17,10 @@ public final class Client extends Thread {
 
 	public Client(Integer port) throws IOException {
 		connection = new Connection(port);
+	}
+
+	public Connection getConnection() {
+		return connection;
 	}
 
 	@Override
@@ -44,6 +49,10 @@ public final class Client extends Thread {
 				System.exit(-1);
 			}
 		}
+	}
+
+	public void setNextInput(Integer input) {
+		this.nextInput = String.valueOf(input);
 	}
 
 	private Opcode pollServer() throws IOException {
@@ -94,11 +103,18 @@ public final class Client extends Thread {
 
 	private void handleRequestInput() {
 		try {
-			String response = connection.readLineFromUser();
+			String response;
+
+			if (nextInput == null) {
+				response = connection.readLineFromUser();
+			} else {
+				response = nextInput;
+			}
+
 			connection.sendLineToServer(response);
+			nextInput = null;
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

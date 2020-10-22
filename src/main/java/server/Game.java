@@ -14,17 +14,27 @@ final class Game {
 	private final List<Player> players;
 	private final ScoreCard scoreCard = new ScoreCard();
 	private final TurnFactory turnFactory;
+	private final Boolean testMode;
 
 	private Turn turn = null;
+	private Boolean waitingForTestConfig = false;
 
 	public Game(List<Player> players) {
 		this.players = players;
 		this.turnFactory = null;
+		this.testMode = false;
+	}
+
+	public Game(List<Player> players, Boolean testMode) {
+		this.players = players;
+		this.turnFactory = null;
+		this.testMode = testMode;
 	}
 
 	public Game(List<Player> players, TurnFactory turnFactory) {
 		this.players = players;
 		this.turnFactory = turnFactory;
+		this.testMode = false;
 	}
 
 	public void loop() {
@@ -53,11 +63,27 @@ final class Game {
 		this.turn = turn;
 	}
 
+	public void setFinishedConfiguring() {
+		this.waitingForTestConfig = false;
+	}
+
 	private void turnForPlayer(Player player) {
 		turn = turnFactory == null ? new Turn() : turnFactory.createAndIncrementTurn();
 
+		this.waitingForTestConfig = true;
+
+		if (testMode) {
+			while (waitingForTestConfig) {
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+				}
+			}
+		}
+
 		try {
 			turn.rollDice();
+
 		} catch (TurnCompleteException | InsufficientDiceException e1) {
 			// No-op. These errors do not fire at the start of a turn.
 		}
@@ -92,6 +118,12 @@ final class Game {
 			printMenu(turn, player);
 
 			try {
+				if (testMode) {
+					// In test mode, we don't prompt for user input right away.
+					// Instead, we wait for appropriate stubbing to occur first.
+					player.setHoldForUserInput(true);
+				}
+
 				String input = player.promptForInput();
 
 				switch (Integer.parseInt(input)) {

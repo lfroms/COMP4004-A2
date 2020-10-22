@@ -8,7 +8,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
 
-final class Connection {
+public final class Connection {
 	private final InetAddress address;
 	private final Socket socket;
 	private final BufferedReader inFromServer;

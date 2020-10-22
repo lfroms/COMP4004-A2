@@ -15,6 +15,8 @@ final class Player {
 	private final DataOutputStream out;
 	private final Integer playerId;
 
+	private Boolean holdForUserInput = false;
+
 	public Player(Integer id) {
 		inputStream = System.in;
 		in = new BufferedReader(new InputStreamReader(inputStream));
@@ -37,11 +39,21 @@ final class Player {
 		safePrint("Welcome to the game. The game will automatically begin once " + numberOfPlayers + " players join.");
 	}
 
+	public void setHoldForUserInput(Boolean holdForUserInput) {
+		this.holdForUserInput = holdForUserInput;
+	}
+
 	public void printMessage(String message) {
 		safePrint(message);
 	}
 
 	public String promptForInput() throws IOException, InterruptedException {
+		while (holdForUserInput) {
+			// This is used for testing. We can delay printing the opcode until we have
+			// provided the client with a predetermined response.
+			Thread.sleep(100);
+		}
+
 		printOpcode(Opcode.REQUEST_INPUT);
 
 		return in.readLine();
