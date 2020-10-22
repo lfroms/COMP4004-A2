@@ -59,6 +59,10 @@ final class ScoreEvaluator {
 			points *= 2;
 		}
 
+		if (turn.getIsInSeaBattle()) {
+			points += seaBattleBonusPoints();
+		}
+
 		return points;
 	}
 

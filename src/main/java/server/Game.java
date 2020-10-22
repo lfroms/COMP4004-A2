@@ -177,8 +177,6 @@ final class Game {
 			player.printMessage("You have lost the sea battle. You will lose " + (-1 * evaluator.seaBattleBonusPoints())
 					+ " points.");
 		}
-
-		scoreCard.addNewScore(new Score(player.getId(), evaluator.seaBattleBonusPoints()));
 	}
 
 	private void summarizeEndOfTurn(Turn turn, Player player) {

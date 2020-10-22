@@ -521,8 +521,7 @@ public class MultipleRollScoreTest {
 		assertTrue(turn.isDisqualified());
 
 		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
-		assertEquals(Integer.valueOf(-300), evaluator.seaBattleBonusPoints());
-		assertEquals(Integer.valueOf(0), evaluator.evaluate());
+		assertEquals(Integer.valueOf(-300), evaluator.evaluate());
 	}
 
 	@Test
@@ -537,8 +536,7 @@ public class MultipleRollScoreTest {
 		assertTrue(turn.isDisqualified());
 
 		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
-		assertEquals(Integer.valueOf(-500), evaluator.seaBattleBonusPoints());
-		assertEquals(Integer.valueOf(0), evaluator.evaluate());
+		assertEquals(Integer.valueOf(-500), evaluator.evaluate());
 	}
 
 	@Test
@@ -553,8 +551,7 @@ public class MultipleRollScoreTest {
 		assertTrue(turn.isDisqualified());
 
 		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
-		assertEquals(Integer.valueOf(-1000), evaluator.seaBattleBonusPoints());
-		assertEquals(Integer.valueOf(0), evaluator.evaluate());
+		assertEquals(Integer.valueOf(-1000), evaluator.evaluate());
 	}
 
 	@Test
@@ -569,8 +566,7 @@ public class MultipleRollScoreTest {
 		assertFalse(turn.isDisqualified());
 
 		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
-		assertEquals(Integer.valueOf(300), evaluator.seaBattleBonusPoints());
-		assertEquals(Integer.valueOf(500), Integer.valueOf(evaluator.evaluate() + evaluator.seaBattleBonusPoints()));
+		assertEquals(Integer.valueOf(500), Integer.valueOf(evaluator.evaluate()));
 	}
 
 	@Test
@@ -596,8 +592,7 @@ public class MultipleRollScoreTest {
 		assertFalse(turn.isDisqualified());
 
 		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
-		assertEquals(Integer.valueOf(300), evaluator.seaBattleBonusPoints());
-		assertEquals(Integer.valueOf(500), Integer.valueOf(evaluator.evaluate() + evaluator.seaBattleBonusPoints()));
+		assertEquals(Integer.valueOf(500), Integer.valueOf(evaluator.evaluate()));
 	}
 
 	@Test
@@ -612,8 +607,7 @@ public class MultipleRollScoreTest {
 		assertFalse(turn.isDisqualified());
 
 		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
-		assertEquals(Integer.valueOf(500), evaluator.seaBattleBonusPoints());
-		assertEquals(Integer.valueOf(800), Integer.valueOf(evaluator.evaluate() + evaluator.seaBattleBonusPoints()));
+		assertEquals(Integer.valueOf(800), Integer.valueOf(evaluator.evaluate()));
 	}
 
 	@Test
@@ -649,8 +643,7 @@ public class MultipleRollScoreTest {
 		assertFalse(turn.isDisqualified());
 
 		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
-		assertEquals(Integer.valueOf(1000), evaluator.seaBattleBonusPoints());
-		assertEquals(Integer.valueOf(1300), Integer.valueOf(evaluator.evaluate() + evaluator.seaBattleBonusPoints()));
+		assertEquals(Integer.valueOf(1300), Integer.valueOf(evaluator.evaluate()));
 	}
 
 	@Test
@@ -685,8 +678,7 @@ public class MultipleRollScoreTest {
 		assertFalse(turn.isDisqualified());
 
 		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
-		assertEquals(Integer.valueOf(1000), evaluator.seaBattleBonusPoints());
-		assertEquals(Integer.valueOf(1300), Integer.valueOf(evaluator.evaluate() + evaluator.seaBattleBonusPoints()));
+		assertEquals(Integer.valueOf(1300), Integer.valueOf(evaluator.evaluate()));
 	}
 
 	@Test
@@ -711,7 +703,6 @@ public class MultipleRollScoreTest {
 		assertFalse(turn.isDisqualified());
 
 		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
-		assertEquals(Integer.valueOf(300), evaluator.seaBattleBonusPoints());
-		assertEquals(Integer.valueOf(1200), Integer.valueOf(evaluator.evaluate() + evaluator.seaBattleBonusPoints()));
+		assertEquals(Integer.valueOf(1200), Integer.valueOf(evaluator.evaluate()));
 	}
 }
