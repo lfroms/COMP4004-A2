@@ -22,11 +22,12 @@ import model.Turn;
 import model.TurnCompleteException;
 
 public class BasicGlueCode {
+	List<Player> players = new ArrayList<>();
 	Game game;
 
 	@Given("game has started with {int} players")
 	public void game_has_started_with_players(Integer int1) {
-		List<Player> players = new ArrayList<>();
+		players.clear();
 
 		for (int i = 0; i < int1; i++) {
 			players.add(new Player(i));
@@ -133,6 +134,21 @@ public class BasicGlueCode {
 		setTreasureChestDiceOfType(dice, DieFace.MONKEY, int3, false);
 		setTreasureChestDiceOfType(dice, DieFace.COIN, int4, false);
 		setTreasureChestDiceOfType(dice, DieFace.DIAMOND, int5, false);
+	}
+
+	@Given("player {int} has gained {int} points")
+	public void player_has_gained(Integer int1, Integer int2) {
+		game.getScoreCard().addNewScore(new Score(int1, int2));
+	}
+
+	@When("player ends turn")
+	public void player_ends_turn() {
+		game.endTurn(game.getCurrentTurn(), players.get(0));
+	}
+
+	@Then("player {int} has {int} points")
+	public void player_has_points(Integer int1, Integer int2) {
+		assertEquals(int2, game.getScoreCard().getCurrentScore(int1));
 	}
 
 	private void addNumberOfFaces(List<DieFace> input, DieFace face, Integer count) {
