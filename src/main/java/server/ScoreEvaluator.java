@@ -32,7 +32,13 @@ final class ScoreEvaluator {
 			Integer numberOfSkulls = countDice(turn.getDice().getAll(), DieFace.SKULL)
 					+ (turn.getFortuneCard().getNumericalValue());
 
-			return numberOfSkulls * 100;
+			Integer skullsPoints = numberOfSkulls * 100;
+
+			if (turn.getFortuneCard().getType() == FortuneCardType.CAPTAIN) {
+				skullsPoints *= 2;
+			}
+
+			return skullsPoints;
 		}
 
 		countDiceTypes();

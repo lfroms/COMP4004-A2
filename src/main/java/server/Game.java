@@ -176,6 +176,7 @@ final class Game {
 		} else {
 			player.printMessage("You have lost the sea battle. You will lose " + (-1 * evaluator.seaBattleBonusPoints())
 					+ " points.");
+			scoreCard.addNewScore(new Score(player.getId(), evaluator.seaBattleBonusPoints()));
 		}
 	}
 
@@ -183,7 +184,7 @@ final class Game {
 		player.printMessage("Your total number of points is " + scoreCard.getCurrentScore(player.getId()) + ".");
 	}
 
-	private void endTurn(Turn turn, Player player) {
+	public void endTurn(Turn turn, Player player) {
 		ScoreEvaluator evaluator = new ScoreEvaluator(turn);
 
 		if (turn.isDisqualified() && !(turn.getFortuneCard().getType() == FortuneCardType.TREASURE_CHEST)
