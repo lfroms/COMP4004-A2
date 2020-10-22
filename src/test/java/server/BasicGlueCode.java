@@ -74,6 +74,12 @@ public class BasicGlueCode {
 		holdDiceOfType(dice, DieFace.DIAMOND, int5);
 	}
 
+	@Given("player has {string} fortune card with {int}")
+	public void player_has_fortune_card_with(String string, Integer integer) {
+		FortuneCard fortuneCard = new FortuneCard(FortuneCardType.valueOf(string), integer);
+		game.getCurrentTurn().setFortuneCard(fortuneCard);
+	}
+
 	@Given("player has {string} fortune card")
 	public void player_has_fortune_card(String string) {
 		FortuneCard fortuneCard = new FortuneCard(FortuneCardType.valueOf(string));
