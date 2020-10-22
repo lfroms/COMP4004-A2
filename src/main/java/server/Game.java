@@ -254,13 +254,16 @@ final class Game {
 	}
 
 	private void alertOtherPlayersOfTurn(Player currentPlayer) {
-		for (int i = 0; i < players.size(); i++) {
-			if (players.get(i).getId() == currentPlayer.getId()) {
-				continue;
-			}
+		players.forEach(player -> {
+			players.forEach(playerOfGame -> {
+				player.printMessage("Player " + playerOfGame.getId() + " has "
+						+ scoreCard.getCurrentScore(playerOfGame.getId()) + " points.");
+			});
+		});
 
-			players.get(i).printMessage("It is now player #" + currentPlayer.getId() + "'s turn.");
-		}
+		allPlayersExcept(currentPlayer).forEach(player -> {
+			player.printMessage("It is now player #" + currentPlayer.getId() + "'s turn.");
+		});
 	}
 
 	private List<Player> allPlayersExcept(Player player) {

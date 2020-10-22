@@ -75,7 +75,7 @@ final class Server extends Thread {
 
 				// TODO: Run in thread to not block other clients from connecting.
 				player.sendPlayerId();
-				player.printGreeting();
+				player.printGreeting(numberOfPlayers);
 
 			} catch (IOException e) {
 				e.printStackTrace();

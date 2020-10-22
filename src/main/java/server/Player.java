@@ -33,8 +33,8 @@ final class Player {
 		return playerId;
 	}
 
-	public void printGreeting() {
-		safePrint("Welcome to the game. The game will automatically begin once two players join.");
+	public void printGreeting(Integer numberOfPlayers) {
+		safePrint("Welcome to the game. The game will automatically begin once " + numberOfPlayers + " players join.");
 	}
 
 	public void printMessage(String message) {
