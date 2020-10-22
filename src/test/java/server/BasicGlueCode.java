@@ -66,7 +66,7 @@ public class BasicGlueCode {
 	@When("player has held {int} parrots, {int} swords, {int} monkeys, {int} coins, {int} diamonds")
 	public void player_has_held_parrots_swords_monkeys_coins_diamonds(Integer int1, Integer int2, Integer int3,
 			Integer int4, Integer int5) {
-		List<Die> dice = game.getCurrentTurn().getDice().getRollable();
+		List<Die> dice = game.getCurrentTurn().getDice().getAll();
 
 		holdDiceOfType(dice, DieFace.PARROT, int1);
 		holdDiceOfType(dice, DieFace.SWORD, int2);
