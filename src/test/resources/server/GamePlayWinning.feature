@@ -74,3 +74,5 @@ Feature: Level 2: Networked Game Winning
   	
   	Then player 2 has won the game
   	And the game is finished
+
+  	Then all connections are closed

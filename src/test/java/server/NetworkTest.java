@@ -95,6 +95,11 @@ public class NetworkTest {
 		assertTrue(game.getIsComplete());
 	}
 
+	@Then("all connections are closed")
+	public void all_connections_are_closed() throws InterruptedException, IOException {
+		server.getSocket().close();
+	}
+
 	private void addNumberOfFaces(List<DieFace> input, DieFace face, Integer count) {
 		for (int i = 0; i < count; i++) {
 			input.add(face);

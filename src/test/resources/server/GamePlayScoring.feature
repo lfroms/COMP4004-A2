@@ -32,3 +32,5 @@ Feature: Level 2: Networked Game Scoring
   	When turn has started
   	When player 1 responds with option 5
   	Then player 1 has score of 2300
+
+  	Then all connections are closed

@@ -70,6 +70,10 @@ final class Server extends Thread {
 		return game;
 	}
 
+	public ServerSocket getSocket() {
+		return serverSocket;
+	}
+
 	@Override
 	public void run() {
 		System.out.println("Server started at " + localhost.toString());
