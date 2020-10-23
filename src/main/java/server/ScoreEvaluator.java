@@ -111,17 +111,17 @@ final class ScoreEvaluator {
 		numberOfMonkeys = countDice(validDice, DieFace.MONKEY);
 		numberOfDiamonds = countDice(validDice, DieFace.DIAMOND);
 
-		if (turn.getFortuneCard().getType() == FortuneCardType.GOLD && numberOfCoins != 8) {
+		if (turn.getFortuneCard().getType() == FortuneCardType.GOLD) {
 			numberOfCoins++;
 		}
 
-		if (turn.getFortuneCard().getType() == FortuneCardType.DIAMOND && numberOfDiamonds != 8) {
+		if (turn.getFortuneCard().getType() == FortuneCardType.DIAMOND) {
 			numberOfDiamonds++;
 		}
 	}
 
 	private Integer evaluateOfAKindPoints(Integer count) {
-		if (count == 8) {
+		if (count >= 8) {
 			return 4000;
 		} else if (count == 7) {
 			return 2000;
