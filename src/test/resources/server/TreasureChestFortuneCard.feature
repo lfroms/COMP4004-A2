@@ -1,7 +1,7 @@
 Feature: Level 1b: Treasure Chest
 
   @treasureChestA
-  Scenario:
+  Scenario: Scenario A
   	Given game has started with 1 players
   	And player has "TREASURE_CHEST" fortune card
   	And player will receive 0 skulls, 3 parrots, 2 swords, 0 monkeys, 1 coins, 2 diamonds
@@ -17,7 +17,7 @@ Feature: Level 1b: Treasure Chest
   	Then player receives 1100 points
   	
   @treasureChestB
-  Scenario:
+  Scenario: Scenario B
   	Given game has started with 1 players
   	And player has "TREASURE_CHEST" fortune card
   	And player will receive 2 skulls, 3 parrots, 0 swords, 0 monkeys, 3 coins, 0 diamonds

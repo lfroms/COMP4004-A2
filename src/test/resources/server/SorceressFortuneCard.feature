@@ -1,7 +1,7 @@
 Feature: Level 1b: Sorceress Fortune Card
 
 	@sorceressRerollSingleSkull
-  Scenario:
+  Scenario: Reroll single skull
   	Given game has started with 1 players
   	And player has "SORCERESS" fortune card
   	And player will receive 2 skulls, 2 parrots, 2 swords, 2 monkeys, 0 coins, 0 diamonds
@@ -11,7 +11,7 @@ Feature: Level 1b: Sorceress Fortune Card
   	Then turn can continue
   	
   @sorceressRerollSkullOnSecondRoll
-  Scenario:
+  Scenario: Reroll single skull on second roll
   	Given game has started with 1 players
   	And player has "SORCERESS" fortune card
   	And player will receive 0 skulls, 2 parrots, 2 swords, 2 monkeys, 2 coins, 0 diamonds
@@ -23,7 +23,7 @@ Feature: Level 1b: Sorceress Fortune Card
   	Then player receives 300 points
   	
   @sorceressRerollSkullOnSecondRollAndContinue
-  Scenario:
+  Scenario: Reroll single skull on second roll and turn can continue
   	Given game has started with 1 players
   	And player has "SORCERESS" fortune card
   	And player will receive 0 skulls, 2 parrots, 2 swords, 2 monkeys, 2 coins, 0 diamonds

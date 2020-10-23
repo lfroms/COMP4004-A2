@@ -1,7 +1,7 @@
 Feature: Level 1b: Monkey Business
   
   @monkeyBusinessFirstRoll
-  Scenario:
+  Scenario: Monkey Business on first roll
   	Given game has started with 1 players
   	And player has "MONKEY_BUSINESS" fortune card
   	And player will receive 1 skulls, 3 parrots, 0 swords, 3 monkeys, 1 coins, 0 diamonds
@@ -9,7 +9,7 @@ Feature: Level 1b: Monkey Business
   	Then player receives 1100 points
   	
   @monkeyBusinessSeveralRollsA
-  Scenario:
+  Scenario: Monkey business over several rolls A
   	Given game has started with 1 players
   	And player has "MONKEY_BUSINESS" fortune card
   	And player will receive 0 skulls, 2 parrots, 2 swords, 3 monkeys, 0 coins, 1 diamonds
@@ -21,7 +21,7 @@ Feature: Level 1b: Monkey Business
   	Then player receives 400 points
   	
   @monkeyBusinessSeveralRollsB
-  Scenario:
+  Scenario: Monkey business over several rolls B
   	Given game has started with 1 players
   	And player has "MONKEY_BUSINESS" fortune card
   	And player will receive 0 skulls, 2 parrots, 2 swords, 3 monkeys, 0 coins, 1 diamonds

@@ -1,7 +1,7 @@
 Feature: Level 1b: Island of Skulls and Skulls Fortune Card
 
   @dieWith1SkullAnd2SkullsFortuneCard
-  Scenario:
+  Scenario: Die with one skull and fortune card with two skulls
   	Given game has started with 1 players
   	And player has "SKULLS" fortune card with 2
   	And player will receive 1 skulls, 7 parrots, 0 swords, 0 monkeys, 0 coins, 0 diamonds
@@ -9,7 +9,7 @@ Feature: Level 1b: Island of Skulls and Skulls Fortune Card
   	Then the turn ends
   
   @dieWith2SkullsAnd1SkullFortuneCard
-  Scenario:
+  Scenario: Die with two skulls and fortune card with one skull
   	Given game has started with 1 players
   	And player has "SKULLS" fortune card with 1
   	And player will receive 2 skulls, 6 parrots, 0 swords, 0 monkeys, 0 coins, 0 diamonds
@@ -17,7 +17,7 @@ Feature: Level 1b: Island of Skulls and Skulls Fortune Card
   	Then the turn ends
   	
   @roll5SkullsWithCaptainFortuneCard
-  Scenario:
+  Scenario: Roll five skulls with captain fortune card
   	Given game has started with 2 players
   	And player 1 has gained 1000 points
   	And player has "CAPTAIN" fortune card
@@ -27,7 +27,7 @@ Feature: Level 1b: Island of Skulls and Skulls Fortune Card
   	Then player 1 has 0 points
   	
   @roll2SkullsAnd2SkullsFortuneCard
-  Scenario:
+  Scenario: Roll two skulls and have fortune card with two skulls
   	Given game has started with 2 players
   	And player 1 has gained 700 points
   	And player has "SKULLS" fortune card with 2
@@ -41,7 +41,7 @@ Feature: Level 1b: Island of Skulls and Skulls Fortune Card
   	Then player 1 has 0 points
   	
   @roll3SkullsAnd2SkullsFortuneCard
-  Scenario:
+  Scenario: Roll three skulls and have fortune card with two skulls
   	Given game has started with 2 players
   	And player 1 has gained 500 points
   	And player has "SKULLS" fortune card with 2
@@ -53,7 +53,7 @@ Feature: Level 1b: Island of Skulls and Skulls Fortune Card
   	Then player 1 has 0 points
   	
  	@roll3SkullsAnd1SkullFortuneCard
- 	Scenario:
+ 	Scenario: Roll three skulls and have fortune card with one skull
  		Given game has started with 2 players
  		And player 1 has gained 500 points
  		And player has "SKULLS" fortune card with 1
@@ -67,7 +67,7 @@ Feature: Level 1b: Island of Skulls and Skulls Fortune Card
  		Then player 1 has 0 points
 
  	@islandOfSkullsCannotMakeNegativePoints
- 	Scenario:
+ 	Scenario: Points cannot become negative
  		Given game has started with 2 players
  		And player 1 has gained 100 points
  		And player has "SKULLS" fortune card with 3

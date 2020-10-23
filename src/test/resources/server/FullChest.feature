@@ -1,7 +1,7 @@
 Feature: Level 1b: Full Chest
 
 	@fullChestGoldFortuneCardNoBonus
-	Scenario:
+	Scenario: No full chest with gold fortune card
 		Given game has started with 1 players
 		And player has "GOLD" fortune card
 		And player will receive 0 skulls, 1 parrots, 3 swords, 3 monkeys, 0 coins, 1 diamonds
@@ -9,7 +9,7 @@ Feature: Level 1b: Full Chest
 		Then player receives 400 points
 		
 	@fullChestCaptainFortuneCard
-	Scenario:
+	Scenario: Full chest with captain fortune card
 		Given game has started with 1 players
 		And player has "CAPTAIN" fortune card
 		And player will receive 0 skulls, 0 parrots, 3 swords, 3 monkeys, 2 coins, 0 diamonds
@@ -17,7 +17,7 @@ Feature: Level 1b: Full Chest
 		Then player receives 1800 points
 		
 	@fullChestGoldFortuneCard
-	Scenario:
+	Scenario: Full chest with gold fortune card
 		Given game has started with 1 players
 		And player has "GOLD" fortune card
 		And player will receive 0 skulls, 0 parrots, 4 swords, 3 monkeys, 0 coins, 1 diamonds
@@ -25,7 +25,7 @@ Feature: Level 1b: Full Chest
 		Then player receives 1000 points
 		
 	@fullChest2SwordSeaBattle
-	Scenario:
+	Scenario: Full chest with two sword sea battle
 		Given game has started with 1 players
 		And player has "SEA_BATTLE" fortune card with 2
 		And player will receive 0 skulls, 2 parrots, 1 swords, 4 monkeys, 1 coins, 0 diamonds
@@ -36,7 +36,7 @@ Feature: Level 1b: Full Chest
 		Then player receives 1200 points
 		
 	@fullChestMonkeyBusiness
-	Scenario:
+	Scenario: Full chest and Monkey Business
 		Given game has started with 1 players
 		And player has "MONKEY_BUSINESS" fortune card
 		And player will receive 0 skulls, 1 parrots, 0 swords, 2 monkeys, 2 coins, 3 diamonds

@@ -1,7 +1,7 @@
 Feature: Level 2: Networked Game Winning
 
   @winnerIsDeclared
-  Scenario:
+  Scenario: Game can be won in networked gameplay
   	Given network game has started with 3 players
   	
   	# Round 1

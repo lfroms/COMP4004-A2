@@ -1,7 +1,7 @@
 Feature: Level 2: Networked Game Scoring
 
   @scoreUpdatesDuringGameplay
-  Scenario:
+  Scenario: Score is updating during networked gameplay
   	Given network game has started with 3 players
   	Given current player will receive 0 skulls, 0 parrots, 0 swords, 3 monkeys, 2 coins, 3 diamonds
   	And player will receive "GOLD" fortune card
