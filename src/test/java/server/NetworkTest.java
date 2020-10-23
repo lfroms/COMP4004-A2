@@ -1,6 +1,7 @@
 package server;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class NetworkTest {
 		server.getPlayers().get(int1).setHoldForUserInput(false);
 
 		// Wait for server to process
-		Thread.sleep(100);
+		Thread.sleep(200);
 	}
 
 	@When("turn has started")
@@ -80,6 +81,18 @@ public class NetworkTest {
 	@Then("player {int} has score of {int}")
 	public void player_has_score_of(Integer int1, Integer int2) {
 		assertEquals(int2, game.getScoreCard().getCurrentScore(int1 + 1));
+	}
+
+	@Then("player {int} has won the game")
+	public void player_has_won_the_game(Integer int1) {
+		// Adding 1 since ID's are offset by 1
+		assertTrue(game.getScoreCard().getWinnerId().isPresent());
+		assertEquals(Integer.valueOf(int1 + 1), game.getScoreCard().getWinnerId().get());
+	}
+
+	@Then("the game is finished")
+	public void the_game_is_finished() {
+		assertTrue(game.getIsComplete());
 	}
 
 	private void addNumberOfFaces(List<DieFace> input, DieFace face, Integer count) {

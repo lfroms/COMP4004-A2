@@ -18,6 +18,7 @@ final class Game {
 
 	private Turn turn = null;
 	private Boolean waitingForTestConfig = false;
+	private Boolean isComplete = false;
 
 	public Game(List<Player> players) {
 		this.players = players;
@@ -65,6 +66,10 @@ final class Game {
 
 	public void setFinishedConfiguring() {
 		this.waitingForTestConfig = false;
+	}
+
+	public Boolean getIsComplete() {
+		return isComplete;
 	}
 
 	private void turnForPlayer(Player player) {
@@ -304,6 +309,7 @@ final class Game {
 	}
 
 	private void endGame() {
+		isComplete = true;
 		broadcastMessage("The game is over. Player #" + scoreCard.getWinnerId().get() + " has won the game!");
 		players.forEach(player -> player.endGame());
 	}
